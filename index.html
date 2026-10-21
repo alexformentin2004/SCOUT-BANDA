@@ -1,0 +1,328 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#214768"><title>Scout Personale Volley</title><link rel="manifest" href="manifest.webmanifest"><style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#eaf2fc;background:#081628;font-synthesis:none}*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:14px;background:#25476d;color:white;padding:13px 15px;font-weight:700}button:disabled{opacity:.38;cursor:not-allowed}.primary{background:#3788eb}.good{background:#147d58}.bad{background:#a8374b}.muted{background:#1a324f}.wrap{max-width:690px;margin:auto;padding:15px 14px 110px}header{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:8px 0 22px}.small{font-size:12px;color:#a9c1db}.title{font-size:21px;font-weight:800}.panel{background:#122741;border:1px solid #2b4666;border-radius:20px;padding:15px;margin-bottom:14px}.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.spread{justify-content:space-between}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.tile{min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}.tile b{font-size:15px}.tile span{font-size:23px}.chip{font-size:12px;background:#264567;padding:7px 9px;border-radius:20px}.sub{font-size:14px;color:#bcd0e6;line-height:1.5}.hidden{display:none!important}h2{font-size:17px;margin:4px 0 12px}input[type=text],input[type=date],select{background:#0b1c30;border:1px solid #416080;border-radius:10px;color:white;padding:11px;max-width:100%;min-width:0}label{font-size:13px;display:flex;gap:8px;align-items:center}label input{accent-color:#4196ff}.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.actions button{min-height:88px;font-size:17px;padding:15px 10px}.actions button:last-child:nth-child(odd){grid-column:1/-1}.overlay{position:fixed;z-index:1000;inset:0;background:#071323dd;display:grid;place-items:center;padding:18px}.confirm-card{width:min(100%,420px);border:1px solid #49719a;border-radius:20px;padding:22px;background:#142d48;box-shadow:0 12px 55px #0009}.confirm-card h2{font-size:21px;margin-bottom:12px}.confirm-card p{line-height:1.5;color:#c7d9eb}.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}.confirm-actions button{min-height:55px}.big-result-title{font-size:22px;font-weight:800;line-height:1.2}.result-context{padding:14px;background:#0a1d32;border:1px solid #2d526e;border-radius:14px;margin:14px 0 20px;color:#cde4fa;font-size:14px}.court-holder{position:relative;width:100%;max-width:425px;margin:8px auto;touch-action:none;user-select:none}svg{width:100%;display:block;touch-action:none}.status{color:#bbd3ed;font-size:13px;margin:8px 0;text-align:center;min-height:19px}.kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #2b4666;font-size:14px}.kv:last-child{border:0}.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:15px}.tabs button{padding:11px 5px;font-size:13px}.active{outline:2px solid #8cbbff;background:#315d8a}.stat{padding:12px;background:#0b1c30;border-radius:12px;text-align:center}.stat strong{display:block;font-size:24px}.stat small{color:#bcd0e6}.record{border-bottom:1px solid #2b4666;padding:11px 0;display:flex;justify-content:space-between;gap:8px;align-items:center}.record:last-child{border-bottom:0}.record button{font-size:12px;padding:8px}.notice{color:#f3d7a1;font-size:12px}.boot-warning{border:1px solid #ffb37b;background:#36251f;color:#fff0d7;border-radius:12px;padding:12px;font-size:13px;line-height:1.5;margin:12px 0}.ready-indicator{font-size:12px;color:#97e6c1;margin-top:9px}.error{color:#ff9b9b}.bottom{position:sticky;bottom:0;background:#081628eF;padding:11px 0 calc(11px + env(safe-area-inset-bottom));display:flex;gap:9px}.bottom button{flex:1}a{color:#8bc4ff}.legend{font-size:12px;color:#a9c1db}dialog{background:#10243b;border:1px solid #426080;border-radius:20px;color:white;width:min(92vw,460px);padding:18px}dialog::backdrop{background:#0009}footer{color:#93acc7;font-size:11px;text-align:center;margin:15px}
+
+/* V1.3 - report, score distribution and phone-first insights */
+.metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}
+.metric-grid .stat{text-align:left;min-height:80px}.metric-grid .stat strong{font-size:23px}.metric-grid .stat small{display:block;line-height:1.3;margin-top:4px}
+.stat-section{padding:14px;background:#0c2036;border:1px solid #2a4a6b;border-radius:15px;margin:14px 0}
+.stat-section h3{font-size:16px;margin:0 0 9px}.stat-section p{line-height:1.45}
+.grade-row{display:grid;grid-template-columns:31px minmax(0,1fr) 83px;align-items:center;gap:9px;margin:9px 0;font-size:12px}
+.grade-symbol{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#24405b;font-size:17px;font-weight:850;color:white}
+.grade-track{height:12px;border-radius:9px;overflow:hidden;background:#1b334e}.grade-fill{height:100%;border-radius:9px;background:#67b0fb}
+.grade-count{text-align:right;color:#c5daed;font-variant-numeric:tabular-nums}
+.insight-note{background:#102e47;border:1px solid #39698d;border-radius:12px;padding:12px;font-size:13px;line-height:1.5;margin:10px 0}
+.zone-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:10px 0}.zone-cell{border-radius:10px;padding:9px 5px;text-align:center;background:#183c5a;min-height:62px}.zone-cell b{display:block;font-size:18px}.zone-cell small{font-size:11px;color:#d4e4f4}.zone-cell.hot{background:#22645e}.zone-cell.mid{background:#23537e}.zone-cell.low{background:#193650}
+.score-timeline{overflow-x:auto}.set-table{width:100%;border-collapse:collapse;font-size:12px;min-width:350px}.set-table th,.set-table td{padding:9px 6px;border-bottom:1px solid #304b65;text-align:left;white-space:nowrap}.set-table th{color:#b5cfe5}
+.pill-grade{display:inline-flex;align-items:center;justify-content:center;min-width:30px;padding:5px 8px;background:#234a69;border-radius:9px;font-weight:800}
+.record-main{min-width:0;flex:1}.record-title{font-size:14px;line-height:1.35}.record-meta{font-size:12px;color:#a9c1db;margin-top:4px}.record .pill-grade{margin-right:3px}
+#exportPdf{min-height:45px}.under-title{font-size:12px;color:#96b0cd;font-weight:500}
+@media(max-width:390px){.wrap{padding-inline:10px}.panel{padding:12px}.grade-row{grid-template-columns:30px minmax(0,1fr) 73px;gap:6px}}
+
+/* V1.5: luminous navy, vivid buttons, neutral reception workflow */
+:root{color:#f5fbff;background:#183550;color-scheme:dark}
+body{background:linear-gradient(155deg,#254866 0%,#173650 58%,#14304b 100%) fixed}
+button{background:#366a99;color:#fff;box-shadow:0 2px 0 #09243b40;transition:filter .15s ease,transform .12s ease}
+button:active:not(:disabled){transform:scale(.98)}button:hover:not(:disabled){filter:brightness(1.08)}
+button:focus-visible{outline:3px solid #ffe290;outline-offset:3px}
+.primary{background:#267bfa}.good{background:#009e70}.bad{background:#dc3f5e}.muted{background:#315b7e}
+.panel{background:#254764;border-color:#517794;box-shadow:0 5px 20px #081c331f}
+.stat{background:#1a3a57}.stat-section{background:#1d405d;border-color:#4c7494}
+.small,.legend,.record-meta,.grade-count{color:#c6def2}.sub,.stat small,.zone-cell small{color:#deebf7}.under-title{color:#c4d8ea}
+.chip,.grade-symbol{background:#385e7d}.status{color:#dbebff}.notice{color:#ffe7aa}
+input[type=text],input[type=date],select{background:#13344f;border-color:#6393b3;color:#fff}label input{accent-color:#4ac6ef}
+.kv,.record{border-bottom-color:#486984}.grade-track{background:#15334c}
+.insight-note,.result-context{background:#1b405c;border-color:#5683a2;color:#e7f4ff}
+.confirm-card{background:#254866;border-color:#6999b9}.confirm-card p{color:#e5f0fa}
+.overlay{background:#081f35dc}.boot-warning{background:#593529;border-color:#ffa981;color:#ffe8cf}
+.ready-indicator{color:#7affce}.bottom{background:#173650ef}.active{background:#3985c9;outline-color:#93d9ff}
+.zone-cell{background:#214f70}.zone-cell.hot{background:#178e7d}.zone-cell.mid{background:#2974ad}.zone-cell.low{background:#255071}
+.pill-grade{background:#416582}dialog{background:#234662;border-color:#6793b2;color:#fff}footer{color:#c0d8eb}
+#fundamentalButtons .tile{min-height:112px;color:#fff;font-size:15px;letter-spacing:.1px;border:1px solid #ffffff45}
+#fundamentalButtons .fundamental-reception{background:linear-gradient(145deg,#05c9b5,#018eac)}
+#fundamentalButtons .fundamental-serve{background:linear-gradient(145deg,#ffb22c,#e47817)}
+#fundamentalButtons .fundamental-attack{background:linear-gradient(145deg,#c576f5,#8747e0)}
+#fundamentalButtons .tile span{font-size:31px}#fundamentalButtons .tile b{font-size:15px;text-shadow:0 1px 2px #0002}
+.outcome-btn{color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border:1px solid #ffffff3b;background:#2680c1}
+.outcome-btn.kind-reception.outcome-alta{background:#138bcf}
+.outcome-btn.kind-reception.outcome-tesa{background:#e28d18}
+.outcome-btn.kind-reception.outcome-bassa{background:#955bce}
+.outcome-btn.kind-reception.outcome-errore,.outcome-btn.outcome-errore,.outcome-btn.outcome-murato{background:#da3c59}
+.outcome-btn.outcome-punto,.outcome-btn.outcome-ace{background:#04a87a}
+.outcome-btn.outcome-difeso,.outcome-btn.outcome-ricevuta{background:#2785c4}
+.outcome-btn.outcome-muro_toccato,.outcome-btn.outcome-vincente{background:#9359d2}
+.outcome-btn.outcome-insidiosa{background:#e78d14}
+.grade-hash{background:#099e74!important}.grade-plus{background:#54ac35!important}.grade-slash{background:#d39b20!important}.grade-minus{background:#d56d3e!important}.grade-equal{background:#cc3c5c!important}
+.grade-symbol,.pill-grade{color:#fff}
+@media(max-width:390px){#fundamentalButtons .tile{min-height:99px;padding:10px 3px}}
+</style></head><body><main class="wrap"><header><div><div class="title">🏐 Scout Personale <span style="font-size:12px;font-weight:500;opacity:.75">v1.5</span></div><div class="small">Ricezione · Battuta · Attacco</div></div><button id="settingsBtn" class="muted" aria-label="Impostazioni">⚙️</button></header>
+<section id="setup" class="panel"><h2>Nuova partita</h2><div class="row" style="margin-bottom:12px"><input id="opponent" type="text" placeholder="Squadra avversaria" style="flex:1"><input id="matchDate" type="date"></div><div class="sub">Cosa vuoi scoutizzare?</div><div class="row" style="margin:12px 0 18px"><label><input id="enableReception" type="checkbox" checked>Ricezione</label><label><input id="enableServe" type="checkbox" checked>Battuta</label><label><input id="enableAttack" type="checkbox" checked>Attacco</label></div><div id="bootWarning" class="boot-warning" role="status">⚠️ Questa anteprima non ha ancora avviato il motore dell’app. Se questo messaggio rimane visibile, il visualizzatore non consente JavaScript: il pulsante non può funzionare qui. Usa il pacchetto ZIP su un sito HTTPS (ad esempio Netlify Drop).</div><button id="startBtn" class="primary" style="width:100%" disabled>Inizia partita</button><div id="bootReady" class="ready-indicator hidden" role="status">✓ App pronta: puoi iniziare la partita.</div><p class="sub" id="resumeBox"></p></section>
+<section id="home" class="hidden"><div class="panel"><div class="row spread"><div><div class="small" id="matchLabel"></div><h2 id="setLabel">Set 1</h2></div><div class="row"><button id="newMatch" class="muted">+ Nuova partita</button><button id="nextSet" class="muted">Set successivo →</button></div></div><div class="grid3" id="quickStats"></div></div><div class="panel"><h2>Registra un'azione</h2><div id="fundamentalButtons" class="grid3"></div><div style="margin-top:14px" class="row"><button id="undoBtn" class="muted">↶ Annulla</button><button id="redoBtn" class="muted">↷ Ripristina</button><button id="endMatch" class="muted" style="margin-left:auto">Termina partita</button></div><div id="lastRecord" class="sub" style="margin-top:12px"></div></div></section>
+<section id="drawing" class="hidden"><div class="panel"><div class="row spread"><h2 id="drawingTitle"></h2><button class="muted" id="backDrawing">← Indietro</button></div><div class="status" id="drawingStatus">Trascina il dito dal punto di partenza al punto di arrivo.</div><div class="court-holder"><svg id="court" viewBox="0 0 360 590" role="img" aria-label="Campo di pallavolo interattivo"><rect x="8" y="6" width="344" height="578" rx="12" fill="#17334e"/><rect id="awayCourt" x="55" y="65" width="250" height="210" fill="#d99e65" stroke="white" stroke-width="2"/><rect id="ourCourt" x="55" y="275" width="250" height="210" fill="#e9b875" stroke="white" stroke-width="2"/><path id="attackLines" d="M55 205H305 M55 345H305" stroke="white" stroke-width="2"/><path d="M55 275H305" stroke="#203449" stroke-width="6"/><text x="180" y="47" text-anchor="middle" font-size="13" fill="white">AVVERSARI</text><text x="180" y="511" text-anchor="middle" font-size="13" fill="white">NOI</text><text x="180" y="558" text-anchor="middle" font-size="11" fill="#9bb9d5">Le aree fuori dalle linee sono selezionabili</text><g id="zones" fill="#593d22" fill-opacity=".6" font-size="19" font-weight="700" text-anchor="middle"></g><path id="rawPath" fill="none" stroke="#9ad7ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".45"/><path id="drawPath" fill="none" stroke="#246bfa" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle id="startDot" r="7" fill="#2563eb" stroke="white" stroke-width="2" visibility="hidden"/><circle id="endDot" r="8" fill="#21a366" stroke="white" stroke-width="2" visibility="hidden"/></svg></div><div class="row spread"><span id="zoneReadout" class="legend">Nessuna traiettoria</span><button id="redrawBtn" class="muted">↻ Ridisegna</button></div><div id="outcomePanel" class="hidden" style="margin-top:17px"><h2 id="outcomeTitle">Seleziona esito</h2><div id="outcomeButtons" class="actions"></div><div id="outcomeNote" class="notice" style="margin-top:8px"></div></div></div></section>
+<section id="result" class="hidden">
+<div class="panel"><div class="row spread"><div><div class="small">Traiettoria acquisita ✓ · Valuta solo ciò che hai osservato</div><h2 id="resultTitle" class="big-result-title">Seleziona l'esito</h2></div><button id="returnToCourt" class="muted">↻ Ridisegna</button></div>
+<div id="resultContext" class="result-context"></div><div id="resultButtons" class="actions" aria-label="Esiti disponibili"></div>
+<p class="sub" style="margin-top:17px">Un tocco per salvare e tornare ai fondamentali.</p><button id="cancelResult" class="muted" style="width:100%">← Annulla questa registrazione</button></div></section>
+<section id="analytics" class="hidden"><div class="panel"><h2>Statistiche della partita</h2><div class="row" style="margin-bottom:13px"><label>Set <select id="setFilter"></select></label></div><div class="row" style="margin:8px 0 17px"><button class="primary" id="exportPdf">⬇ Esporta PDF</button><span class="small">Il PDF rispetta il filtro del set.</span></div>
+<div class="insight-note"><b>Come vengono calcolati i simboli?</b><div class="small">Ricezione: stima da destinazione e Alta/Tesa/Bassa. Battuta e attacco: esito osservato. Tocca <b>Modifica</b> nello storico per cambiare il voto senza alterare l'esito.</div><button class="muted" id="showLegend" style="margin-top:9px;font-size:12px">Vedi legenda e regole</button><div id="legendContent" class="hidden" style="margin-top:10px"></div></div>
+<div id="analyticsContent"></div></div></section>
+<section id="history" class="hidden"><div class="panel"><h2>Azioni registrate</h2><div id="recordList"></div></div><div class="panel"><h2>Partite precedenti</h2><div id="pastMatches"></div></div></section>
+<nav id="nav" class="tabs hidden"><button data-tab="home" class="active">Scout</button><button data-tab="analytics">Statistiche</button><button data-tab="history">Storico</button></nav><footer>I dati rimangono su questo dispositivo. Esporta regolarmente una copia di sicurezza.</footer></main>
+<div id="confirmOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+<div class="confirm-card"><h2 id="confirmTitle">Conferma</h2><p id="confirmMessage"></p><div class="confirm-actions"><button id="confirmCancel" class="muted">Annulla</button><button id="confirmProceed" class="primary">Conferma</button></div></div></div>
+<dialog id="settings"><h2>Impostazioni e backup</h2><p class="sub">I dati vengono salvati automaticamente sul dispositivo. Non vengono sincronizzati fra telefoni.</p><div class="row"><button id="exportBtn" class="primary">Esporta JSON</button><button id="exportPdfSettings" class="good">Esporta PDF partita</button><button id="importBtn" class="muted">Importa JSON</button><input id="importFile" type="file" accept=".json,application/json" class="hidden"></div><p class="notice">L'importazione sostituisce l'archivio locale: esporta prima un backup.</p><button id="closeSettings" style="width:100%;margin-top:12px">Chiudi</button></dialog>
+<dialog id="editDialog"><h2>Modifica azione</h2><div id="editSummary" class="sub"></div><label style="display:block;margin:12px 0">Esito <select id="editOutcome" style="width:100%;margin-top:5px"></select></label><label style="display:block;margin:12px 0">Simbolo di valutazione
+  <select id="editSymbol" style="width:100%;margin-top:5px"></select></label>
+  <div id="editAutoHint" class="insight-note" style="margin:10px 0;font-size:13px"></div>
+  <div class="row"><button id="saveEdit" class="primary">Salva</button><button id="deleteEdit" class="bad">Elimina</button><button id="closeEdit" class="muted">Annulla</button></div><p class="small">Il simbolo manuale prevale sulla stima. Per cambiare la traiettoria registra di nuovo l'azione.</p></dialog>
+<script>window.addEventListener('error',function(e){var b=document.getElementById('bootWarning');if(b){b.textContent='Errore JavaScript: '+(e.message||'impossibile avviare app');b.classList.remove('hidden')}});</script><script>
+/* Minimal, fully offline PDF report generator. No browser print preview or external network required. */
+window.VolleyPdf = (()=>{
+'use strict';
+const W=595.28,H=841.89,M=43,R=W-43;
+function latin(str){return String(str??'').replace(/→/g,'->').replace(/[–—−]/g,'-').replace(/≥/g,'>=').replace(/≤/g,'<=').replace(/’/g,"'").replace(/•/g,'-').replace(/×/g,'x').replace(/…/g,'...').replace(/€/g,'EUR').replace(/[\u0100-\uffff]/g,ch=>{let n=ch.normalize('NFD').replace(/[\u0300-\u036f]/g,'');return /^[\x20-\xff]$/.test(n)?n:'?'})}
+function escapePdf(s){return latin(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)')}
+function hex(rgb){return rgb.map(x=>(x/255).toFixed(3)).join(' ')}
+const COLORS={ink:[20,42,68],blue:[38,113,185],teal:[20,133,111],muted:[104,123,145],line:[225,232,238],white:[255,255,255],soft:[242,247,251],light:[220,237,251],rose:[180,55,82]};
+function bytes(s){const out=new Uint8Array(s.length);for(let i=0;i<s.length;i++)out[i]=s.charCodeAt(i)&255;return out}
+function encodePdf(objects){const offsets=[0], parts=['%PDF-1.4\n%\xE2\xE3\xCF\xD3\n'];let total=bytes(parts[0]).length;
+  for(let i=0;i<objects.length;i++){offsets.push(total);const o=`${i+1} 0 obj\n${objects[i]}\nendobj\n`;parts.push(o);total+=bytes(o).length}
+  let xref=`xref\n0 ${objects.length+1}\n0000000000 65535 f \n`;for(let i=1;i<offsets.length;i++)xref+=String(offsets[i]).padStart(10,'0')+' 00000 n \n';xref+=`trailer\n<< /Root 1 0 R /Size ${objects.length+1} >>\nstartxref\n${total}\n%%EOF`;
+  parts.push(xref);const output=new Uint8Array(total+bytes(xref).length);let p=0;for(const s of parts){const b=bytes(s);output.set(b,p);p+=b.length}return output;
+}
+function generate({match,report,filter,types,order,pct,rating,nameOutcome}){
+  const pages=[];let pg=null,y=0;
+  function page(){pg={commands:[]};pages.push(pg);y=72;rect(0,0,W,10,COLORS.ink);text(M,31,'SCOUT PERSONALE   /   REPORT PARTITA',10,true,COLORS.blue);rule(43,40,R,40,COLORS.line)}
+  function text(x,top,content,size=10,bold=false,color=COLORS.ink){pg.commands.push(`${hex(color)} rg BT /${bold?'F2':'F1'} ${size} Tf 1 0 0 1 ${x.toFixed(1)} ${(H-top).toFixed(1)} Tm (${escapePdf(content)}) Tj ET`)}
+  function rect(x,top,w,h,color){pg.commands.push(`${hex(color)} rg ${x.toFixed(1)} ${(H-top-h).toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)} re f`)}
+  function rule(x1,top1,x2,top2,color=COLORS.line){pg.commands.push(`${hex(color)} RG 0.75 w ${x1.toFixed(1)} ${(H-top1).toFixed(1)} m ${x2.toFixed(1)} ${(H-top2).toFixed(1)} l S`)}
+  function room(height){if(y+height>790)page()}
+  function wrapWords(str,maxChars){const out=[];let s='';for(const w of latin(str).split(/\s+/)){if(s.length+w.length+1>maxChars){if(s)out.push(s);s=w}else s+=(s?' ':'')+w}if(s)out.push(s);return out}
+  function paragraph(content,max=94,size=9){for(const line of wrapWords(content,max)){room(15);text(M,y,line,size,false,COLORS.muted);y+=13}}
+  function title(content){room(35);text(M,y,content,15,true);y+=24;rule(M,y,R,y);y+=15}
+  function sub(content){room(25);text(M,y,content,11,true,COLORS.blue);y+=18}
+  function cols(rows){for(const [a,b]of rows){room(22);text(M+4,y,a,10);text(355,y,String(b),10,true);y+=18;rule(M,y-6,R,y-6)}}
+  function grade(sec){sub('VALUTAZIONI  # + / - =');for(const s of order){room(24);const n=sec.symbols[s],f=sec.n?n/sec.n:0;text(M,y+1,s,12,true,COLORS.blue);rect(M+37,y-8,345,12,COLORS.soft);if(n)rect(M+37,y-8,345*f,12,s==='='?COLORS.rose:COLORS.blue);text(R-86,y+1,`${n}  |  ${pct(n,sec.n)}`,9,false,COLORS.muted);y+=24}}
+  function kpis(sec){const c=sec.summary.main,cardW=(R-M-12)/2,cardH=57;for(let i=0;i<c.length;i++){const col=i%2,rr=Math.floor(i/2),top=y+rr*(cardH+9);room((rr+1)*(cardH+9));rect(M+col*(cardW+12),top,cardW,cardH,COLORS.soft);text(M+col*(cardW+12)+11,top+24,String(c[i][1]),18,true,COLORS.ink);const label=latin(c[i][0]);text(M+col*(cardW+12)+11,top+43,label.length>30?label.slice(0,29)+'...':label,8,false,COLORS.muted)}y+=2*(cardH+9)+7}
+  function lines(sec){sub('ESITI OSSERVATI');const rows=Object.entries(sec.outcomes).sort((a,b)=>b[1]-a[1]);for(const [k,n]of rows){room(18);const nm=nameOutcome({type:sec.type,outcome:k});text(M+3,y,nm,9);text(R-98,y,`${n}  (${pct(n,sec.n)})`,9,true,COLORS.ink);y+=16;rule(M,y-6,R,y-6)}}
+  function zones(sec){sub(sec.type==='reception'?'ZONE DI PARTENZA DELLA RICEZIONE':'ZONE DI ARRIVO DELLA PALLA');let cc=sec.type==='reception'?sec.starts:sec.ends;const zz=['4','3','2','5','6','1'];let mx=Math.max(1,...Object.values(cc));const cw=(R-M-12)/3;for(let i=0;i<6;i++){const top=y+Math.floor(i/3)*45,x=M+(i%3)*(cw+6),n=cc[zz[i]]||0;rect(x,top,cw,40,n/mx>=.67?COLORS.light:COLORS.soft);text(x+11,top+23,'Z'+zz[i],12,true);text(x+45,top+23,String(n)+' azioni',9,false,COLORS.muted)}y+=102;const other=cc['Fuori campo']||0;if(other){text(M,y-4,'Fuori campo: '+other,9,false,COLORS.muted);y+=11}}
+  page();text(M,y,'Riepilogo partita',22,true);y+=31;
+  paragraph('Avversari: '+match.opponent+'  |  Data: '+match.date+'  |  '+(filter==='all'?'Tutti i set':'Set '+filter)+'  |  '+report.total+' azioni',83,10);y+=14;
+  text(M,y,'Totali',12,true,COLORS.blue);y+=23;
+  const overall=Object.keys(types).map(k=>[types[k],report.sections[k].n]);cols([...overall,['Azioni registrate',report.total]]);y+=16;
+  for(const k of ['reception','serve','attack']){
+    const sec=report.sections[k];room(80);title(types[k]+'   -   '+sec.n+' azioni');if(!sec.n){paragraph('Nessuna azione scoutizzata.');y+=14;continue}
+    kpis(sec);grade(sec);lines(sec);y+=12;zones(sec);y+=20;
+  }
+  if(filter==='all'){
+    title('Confronto tra set');
+    const header=['SET','RIC. +/#','ACE','ATT. PT','EFF. ATT.'];
+    let x=[M+3,M+92,M+220,M+306,M+402];room(22);rect(M,y-14,R-M,26,COLORS.ink);header.forEach((v,i)=>text(x[i],y+3,v,9,true,COLORS.white));y+=28;
+    for(let i=1;i<=match.set;i++){
+      room(22);const v=report.records.filter(r=>r.set===i),rec=v.filter(r=>r.type==='reception'),ser=v.filter(r=>r.type==='serve'),atk=v.filter(r=>r.type==='attack');
+      const pos=rec.filter(r=>['#','+'].includes(rating(r).s)).length,aces=ser.filter(r=>r.outcome==='ace').length,kills=atk.filter(r=>r.outcome==='punto').length,errs=atk.filter(r=>r.outcome==='errore'||r.outcome==='murato').length;
+      [String(i),rec.length?pct(pos,rec.length):'-',String(aces),String(kills),atk.length?pct(kills-errs,atk.length):'-'].forEach((t,j)=>text(x[j],y,t,9,j===0));y+=22;rule(M,y-8,R,y-8)
+    }y+=18;
+  }
+  // Keep the action log and methodology together when the current page is almost full.
+  room(Math.min(560,165+report.records.length*20));
+  title('Registro completo delle azioni');
+  paragraph('Le azioni vengono riportate nell ordine in cui sono state registrate, comprese le valutazioni modificate manualmente.');y+=8;
+  const colsLog=[M,M+40,M+135,M+209,M+275,M+395];
+  function logHeader(){room(25);rect(M,y-14,R-M,26,COLORS.ink);['SET','FONDAMENTO','VOTO','DA','A','ESITO'].forEach((s,i)=>text(colsLog[i]+3,y+3,s,8,true,COLORS.white));y+=28}
+  logHeader();
+  for(const a of report.records){if(y+21>790){page();logHeader()}room(21);const t=types[a.type],from=a.startZone||'-',to=a.endZone||'-',isManual=rating(a).manual;const outcome=latin(nameOutcome(a));const str=[String(a.set),t,rating(a).s+(isManual?'*':''),from,to,outcome.length>24?outcome.slice(0,22)+'..':outcome];str.forEach((v,i)=>text(colsLog[i]+3,y,v,8,i===2));y+=20;rule(M,y-7,R,y-7)}
+  y+=15;room(100);title('Note metodologiche');paragraph('Valutazioni su cinque simboli personalizzati (#, +, /, -, =). Non sono una trascrizione ufficiale DataVolley; non usano il simbolo !.');paragraph('Ricezione: il voto automatico e una stima basata su posizione finale e categoria Alta / Tesa / Bassa. Una ricezione direttamente oltre rete vale = secondo la regola concordata.');paragraph('Battuta: # ace; + insidiosa o vincente indiretta; - ricevuta normalmente; = errore. Attacco: # punto; / muro toccato con palla ancora in gioco; - difeso; = errore oppure muro punto avversario.');paragraph('Attacco efficienza = (punti - errori tecnici - muri punto subiti) / totale attacchi. I risultati reali sono ricavati dagli esiti registrati anche se il voto viene corretto.');paragraph('I simboli con asterisco nel registro sono stati modificati manualmente. Il PDF non modifica l archivio locale.');
+  const total=pages.length;
+  for(let i=0;i<total;i++){
+    const p=pages[i],save=pg;pg=p;rule(M,807,R,807);text(M,823,'SCOUT PERSONALE  |  Report offline  |  '+match.date,8,false,COLORS.muted);text(R-54,823,`${i+1} / ${total}`,8,false,COLORS.muted);pg=save;
+  }
+  // Assemble a valid PDF with built-in fonts; stream lengths are byte lengths (WinAnsi text).
+  const objects=[];const alloc=()=>{objects.push('');return objects.length};
+  const cat=alloc(),pagesId=alloc(),font1=alloc(),font2=alloc();
+  objects[font1-1]='<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>';
+  objects[font2-1]='<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>';
+  const ids=[];
+  for(const p of pages){const content=p.commands.join('\n')+'\n',contentId=alloc(),pId=alloc();objects[contentId-1]=`<< /Length ${bytes(content).length} >>\nstream\n${content}endstream`;objects[pId-1]=`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 ${font1} 0 R /F2 ${font2} 0 R >> >> /Contents ${contentId} 0 R >>`;ids.push(pId)}
+  objects[pagesId-1]=`<< /Type /Pages /Kids [${ids.map(i=>i+' 0 R').join(' ')}] /Count ${ids.length} >>`;
+  objects[cat-1]=`<< /Type /Catalog /Pages ${pagesId} 0 R >>`;
+  return encodePdf(objects);
+}
+return {generate};
+})();
+
+</script><script>
+/* Scout Personale v1.5 | modalita scout neutrale: niente voto durante registrazione */
+(() => {
+'use strict';
+const KEY = 'volley-scout-personal-v1';
+const $ = id => document.getElementById(id);
+const TYPES = { reception:'Ricezione', serve:'Battuta', attack:'Attacco' };
+const ICONS = { reception:'🛡️', serve:'🎯', attack:'⚡' };
+const ORDER = ['#','+','/','-','='];
+// Metric distances from the ideal setting point (6.2 m across, 1.2 m from our net).
+// Classificazione automatica nascosta durante lo scout; visibile solo in Statistiche e Storico.
+const REC_THRESHOLDS = {alta:[['#',1.2],['+',2.5],['/',4]],tesa:[['+',1.5],['/',3]],bassa:[['/',1.7]]};
+const gradeClass=s=>({'#':'grade-hash','+':'grade-plus','/':'grade-slash','-':'grade-minus','=':'grade-equal'})[s]||'';
+const OPTIONS = {
+  reception:[['alta','Alta'],['tesa','Tesa'],['bassa','Bassa'],['errore','Errore o ace subito']],
+  serve:[['ace','Ace'],['errore','Errore'],['ricevuta','Ricevuta'],['vincente','Vincente indiretta'],['insidiosa','Insidiosa']],
+  attack:[['punto','Punto'],['errore','Errore'],['murato','Murato'],['difeso','Difeso'],['muro_toccato','Muro toccato']]
+};
+const NOTES = {
+  reception:{'#':'Perfetta stimata: alta, vicino alla zona ideale','+':'Positiva stimata: arrivo vicino alla zona ideale','/':'Intermedia stimata: controllo non ideale','-':'Negativa stimata: bassa o molto staccata','=':'Errore: ace subito o ricezione oltre rete'},
+  serve:{'#':'Ace diretto','+':'Battuta che crea difficoltà o punto indiretto','/':'Riservato a una correzione manuale','-':'Battuta ricevuta normalmente','=':'Errore di battuta'},
+  attack:{'#':'Punto in attacco','+':'Riservato a una correzione manuale','/':'Palla giocabile dopo contatto con muro, oppure voto manuale','-':'Attacco difeso, valutazione provvisoria','=':'Errore o muro punto avversario (vedi esito)'}
+};
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pct=(n,d)=>d? (100*n/d).toFixed(1)+'%':'0,0%';
+const idgen=()=>String(Date.now())+'-'+Math.random().toString(36).slice(2,8);
+const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
+function emptyStore(){return {schema:2,active:null,matches:[]}}
+function load(){try {const x=JSON.parse(localStorage.getItem(KEY));return x && Array.isArray(x.matches) ? x : emptyStore()}catch{return emptyStore()}}
+let store=load(), currentType='', pts=[], pathDone=false, drawing=false, view='setup', editId=null, redoStack=[], confirming=null;
+function persist(){try{store.schema=2;localStorage.setItem(KEY,JSON.stringify(store))}catch(e){alert('Impossibile salvare sul dispositivo. Esporta immediatamente il backup JSON.')}}
+function active(){return store.matches.find(m=>m.id===store.active)}
+function records(m=active()){return (m?.records||[]).filter(r=>!r.deleted)}
+function nameOutcome(r){return r.outcome==='errore_oltre_rete'?'Errore oltre rete':(OPTIONS[r.type]||[]).find(o=>o[0]===r.outcome)?.[1]||r.outcome}
+function zone(p){if(!p)return '—';if(p.x<55 || p.x>305 || p.y<65 || p.y>485)return 'Fuori campo';const our=p.y>=275;const front=our?p.y<345:p.y>205;const col=p.x<138?0:p.x<222?1:2;return (our ? (front?['4','3','2']:['5','6','1']):(front?['2','3','4']:['1','6','5']))[col]}
+function setterDistance(r){
+  if(!r.end || !Number.isFinite(+r.end.x) || !Number.isFinite(+r.end.y))return null;
+  // Dimensions in meters, relative to our net: our half 250px x 210px = 9m x 9m.
+  const x=(+r.end.x-55)*9/250, depth=(+r.end.y-275)*9/210;
+  return Math.hypot(x-6.2,depth-1.2);
+}
+function ratingAuto(r){
+  if(r.type==='reception'){
+    if(['errore','errore_oltre_rete'].includes(r.outcome) || (r.end && r.end.y<275))return {s:'=',why:'Ricezione classificata come errore; oltre rete = errore secondo la tua regola.'};
+    const d=setterDistance(r);
+    if(d===null)return {s:'/',why:'Manca la destinazione: assegnazione conservativa. Puoi correggere il simbolo.'};
+    const bands=REC_THRESHOLDS[r.outcome];
+    const s=bands?(bands.find(([,radius])=>d<=radius)?.[0]||'-'):'/';
+    return {s,why:`Stima: ricezione ${nameOutcome(r).toLowerCase()}, arrivo a ${d.toFixed(1)} m dal bersaglio configurato vicino alla rete. Non è una misura della vera velocità della palla.`};
+  }
+  if(r.type==='serve'){
+    const map={ace:'#',vincente:'+',insidiosa:'+',ricevuta:'-',errore:'='};
+    return {s:map[r.outcome]||'/',why:r.outcome==='insidiosa'?'Ricezione avversaria staccata da rete, ma giocabile.':r.outcome==='vincente'?'Punto indiretto: classificazione positiva, non ace.':'Valutazione derivata dall’esito della battuta.'};
+  }
+  if(r.type==='attack'){
+    // Conservative personalized 5-code mapping; KPI kill/block/error use raw outcome, not grade.
+    const map={punto:'#',errore:'=',murato:'=',difeso:'-',muro_toccato:'/'};
+    return {s:map[r.outcome]||'/',why:r.outcome==='murato'?'Muro punto avversario: conta come attacco murato nell’efficienza, distinto da errore tecnico.':r.outcome==='muro_toccato'?'Muro toccato e azione proseguita: valutazione intermedia, senza dedurre chi ha recuperato.':'Valutazione iniziale dall’esito; modificabile quando il pallone è stato difeso con difficoltà.'};
+  }
+  return {s:'/',why:'Valutazione non disponibile.'};
+}
+function rating(r){const auto=ratingAuto(r);return (ORDER.includes(r.symbolOverride))?{s:r.symbolOverride,why:'Voto corretto manualmente. Auto: '+auto.s+'. '+auto.why,manual:true}: {...auto,manual:false}}
+function dataFor(m=active(),set='all'){
+  const list=records(m).filter(r=>set==='all'||String(r.set)===String(set));
+  const sections={};
+  for(const type of Object.keys(TYPES)){
+    const a=list.filter(r=>r.type===type),cnt={},sym=Object.fromEntries(ORDER.map(k=>[k,0])),zoneStart={},zoneEnd={};
+    for(const r of a){cnt[r.outcome]=(cnt[r.outcome]||0)+1;sym[rating(r).s]++;const z1=r.startZone||zone(r.start),z2=r.endZone||zone(r.end);zoneStart[z1]=(zoneStart[z1]||0)+1;zoneEnd[z2]=(zoneEnd[z2]||0)+1}
+    const n=a.length,k=key=>cnt[key]||0;
+    const summary=type==='attack'?{main:[['Punti',k('punto')],['Punti / attacchi',pct(k('punto'),n)],['Efficienza',pct(k('punto')-k('errore')-k('murato'),n)],['Errori + muri punto',k('errore')+k('murato')]],detail:[['Muro toccato',k('muro_toccato')],['Attacchi difesi',k('difeso')],['Muri punto subiti',k('murato')],['Errori tecnici',k('errore')]]}:
+      type==='serve'?{main:[['Ace',k('ace')],['Ace %',pct(k('ace'),n)],['Insidiose + vincenti indirette',pct(k('insidiosa')+k('vincente'),n)],['Errori %',pct(k('errore'),n)]],detail:[['Insidiose',k('insidiosa')],['Vincenti indirette',k('vincente')],['Ricevute normalmente',k('ricevuta')],['Errori',k('errore')]]}:
+      {main:[['Perfette (#)',pct(sym['#'],n)],['Positive (# e +)',pct(sym['#']+sym['+'],n)],['Errori',k('errore')+k('errore_oltre_rete')],['Indice ricezione',n?((3*sym['#']+2*sym['+']+sym['/'])/n).toFixed(2)+' / 3':'—']],detail:[['Alta',k('alta')],['Tesa',k('tesa')],['Bassa',k('bassa')],['Errori oltre rete',k('errore_oltre_rete')],['Ace subiti / errori',k('errore')]]};
+    sections[type]={type,n,actions:a,outcomes:cnt,symbols:sym,starts:zoneStart,ends:zoneEnd,summary};
+  }
+  return {sections,records:list,total:list.length};
+}
+function confirmAction(title,message,confirmLabel,fn){confirming=fn;$('confirmTitle').textContent=title;$('confirmMessage').textContent=message;$('confirmProceed').textContent=confirmLabel;$('confirmOverlay').classList.remove('hidden')}
+function dismissConfirm(){confirming=null;$('confirmOverlay').classList.add('hidden')}
+$('confirmCancel').onclick=dismissConfirm;
+$('confirmProceed').onclick=()=>{const fn=confirming;dismissConfirm();if(fn)fn()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('confirmOverlay').classList.contains('hidden'))dismissConfirm()});
+function switchView(v){view=v;for(const id of ['setup','home','drawing','result','analytics','history'])$(id).classList.toggle('hidden',id!==v);$('nav').classList.toggle('hidden',!active()||['setup','drawing','result'].includes(v));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===v));if(v==='home')renderHome();if(v==='analytics')renderAnalytics();if(v==='history')renderHistory();requestAnimationFrame(()=>window.scrollTo(0,0))}
+function start(){const chosen=[['reception','enableReception'],['serve','enableServe'],['attack','enableAttack']].filter(([a,id])=>$(id).checked).map(a=>a[0]);if(!chosen.length)return alert('Seleziona almeno un fondamentale.');const m={id:idgen(),opponent:$('opponent').value.trim()||'Avversari',date:$('matchDate').value||today(),enabled:chosen,set:1,finished:false,records:[]};store.matches.unshift(m);store.active=m.id;redoStack=[];persist();switchView('home')}
+function renderHome(){const m=active();if(!m){switchView('setup');return}$('matchLabel').textContent=m.opponent+' · '+m.date;$('setLabel').textContent='Set '+m.set;$('nextSet').disabled=!!m.finished;const r=records(m);$('quickStats').innerHTML=Object.keys(TYPES).map(t=>`<div class="stat"><strong>${r.filter(a=>a.type===t).length}</strong><small>${TYPES[t]}</small></div>`).join('');$('fundamentalButtons').replaceChildren();(m.enabled||Object.keys(TYPES)).forEach(t=>{const b=document.createElement('button');b.className='tile fundamental-'+t;b.innerHTML=`<span>${ICONS[t]}</span><b>${TYPES[t]}</b>`;b.disabled=!!m.finished;b.onclick=()=>enterDrawing(t);$('fundamentalButtons').append(b)});$('undoBtn').disabled=!r.length||m.finished;$('redoBtn').disabled=!redoStack.length||m.finished;$('endMatch').textContent=m.finished?'Riapri partita':'Termina partita';const last=r.at(-1);$('lastRecord').innerHTML=last?`Ultima: <b>${esc(TYPES[last.type])}</b> · ${esc(nameOutcome(last))} · Set ${last.set}`:'Nessuna azione registrata.'}
+function setZones(){const specs=[['1',96,122],['6',180,122],['5',264,122],['2',96,236],['3',180,236],['4',264,236],['4',96,312],['3',180,312],['2',264,312],['5',96,427],['6',180,427],['1',264,427]];$('zones').replaceChildren();for(const [n,x,y]of specs){let el=document.createElementNS('http://www.w3.org/2000/svg','text');el.setAttribute('x',x);el.setAttribute('y',y);el.textContent=n;$('zones').append(el)}}
+function enterDrawing(t){currentType=t;clearDrawing();$('drawingTitle').textContent=TYPES[t]+' · disegna la palla';$('drawingStatus').textContent='Trascina dalla partenza all’arrivo della palla.';switchView('drawing')}
+function pointFromEvent(e){const rect=$('court').getBoundingClientRect();return{x:Math.max(0,Math.min(360,(e.clientX-rect.left)*360/rect.width)),y:Math.max(0,Math.min(590,(e.clientY-rect.top)*590/rect.height))}}
+function clearDrawing(){pts=[];pathDone=false;$('rawPath').setAttribute('d','');$('drawPath').setAttribute('d','');$('startDot').setAttribute('visibility','hidden');$('endDot').setAttribute('visibility','hidden');$('zoneReadout').textContent='Nessuna traiettoria';$('outcomePanel').classList.add('hidden')}
+function pathString(arr){return arr.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join(' ')}
+function smooth(points){if(points.length<3)return points;const a=[points[0]];for(let i=1;i<points.length-1;i++)a.push({x:(points[i-1].x+2*points[i].x+points[i+1].x)/4,y:(points[i-1].y+2*points[i].y+points[i+1].y)/4});a.push(points.at(-1));return a.filter((p,i)=>i===0||i===a.length-1||i%3===0)}
+function paint(){if(!pts.length)return;const norm=smooth(pts);$('rawPath').setAttribute('d',pathString(pts));$('drawPath').setAttribute('d',pathString(norm));for(const [id,p]of [['startDot',pts[0]],['endDot',pts.at(-1)]]){const el=$(id);el.setAttribute('cx',p.x);el.setAttribute('cy',p.y);el.setAttribute('visibility','visible')}}
+$('court').addEventListener('pointerdown',e=>{if(pathDone)return;e.preventDefault();drawing=true;pts=[pointFromEvent(e)];$('court').setPointerCapture(e.pointerId);paint()});
+$('court').addEventListener('pointermove',e=>{if(!drawing)return;e.preventDefault();const p=pointFromEvent(e),a=pts.at(-1);if(Math.hypot(p.x-a.x,p.y-a.y)>2){pts.push(p);paint()}});
+function finish(e){if(!drawing)return;drawing=false;if(e){const p=pointFromEvent(e),last=pts.at(-1);if(last&&Math.hypot(p.x-last.x,p.y-last.y)>2)pts.push(p)}const a=pts[0],b=pts.at(-1);if(!a||!b||Math.hypot(a.x-b.x,a.y-b.y)<18){clearDrawing();$('drawingStatus').textContent='Gesto troppo corto, riprova.';return}paint();pathDone=true;$('zoneReadout').textContent=zone(a)+' → '+zone(b);$('drawingStatus').textContent='Traiettoria acquisita.';showOutcomes()}
+$('court').addEventListener('pointerup',finish);
+$('court').addEventListener('pointercancel',()=>{drawing=false;clearDrawing()});
+$('redrawBtn').onclick=()=>{clearDrawing();$('drawingStatus').textContent='Disegna nuovamente la traiettoria.'};
+$('backDrawing').onclick=()=>switchView('home');
+function showOutcomes(){if(currentType==='reception'&&pts.at(-1)?.y<275){saveRecord('errore_oltre_rete');return}
+  $('resultTitle').textContent=TYPES[currentType]+' · esito';$('resultContext').textContent='Da zona '+zone(pts[0])+' a zona '+zone(pts.at(-1))+'. Seleziona l’esito per salvare.';
+  $('resultButtons').replaceChildren();
+  for(const [val,name] of OPTIONS[currentType]){
+    const b=document.createElement('button');
+    b.className='outcome-btn kind-'+currentType+' outcome-'+val;
+    b.textContent=name; // Solo dato osservabile. Mai anticipare il simbolo durante lo scout.
+    b.onclick=()=>saveRecord(val);
+    $('resultButtons').append(b);
+  }
+  switchView('result');
+}
+$('returnToCourt').onclick=()=>{clearDrawing();$('drawingStatus').textContent='Ridisegna la traiettoria.';switchView('drawing')};
+$('cancelResult').onclick=()=>{clearDrawing();switchView('home')};
+function saveRecord(outcome){const m=active();if(!m||m.finished||pts.length<2)return;const a=pts[0],b=pts.at(-1),round=p=>({x:+p.x.toFixed(2),y:+p.y.toFixed(2)});m.records.push({id:idgen(),type:currentType,set:m.set,outcome,start:round(a),end:round(b),startZone:zone(a),endZone:zone(b),raw:pts.map(round),normalized:smooth(pts).map(round),createdAt:new Date().toISOString(),deleted:false});redoStack=[];persist();switchView('home')}
+$('startBtn').onclick=start;
+$('newMatch').onclick=()=>{$('opponent').value='';$('matchDate').value=today();$('bootReady').textContent='✓ La partita precedente rimane salvata.';switchView('setup')};
+$('nextSet').onclick=()=>{const m=active();if(!m||m.finished)return;confirmAction('Passare al set successivo?','I dati del set '+m.set+' rimarranno salvati.','Inizia set '+(m.set+1),()=>{m.set++;redoStack=[];persist();switchView('home')})};
+$('endMatch').onclick=()=>{const m=active();if(!m)return;if(m.finished)confirmAction('Riaprire la partita?','Potrai inserire nuove azioni.','Riapri',()=>{m.finished=false;persist();switchView('home')});else confirmAction('Terminare la partita?','Le statistiche resteranno accessibili e potrai esportarle in PDF.','Termina partita',()=>{m.finished=true;persist();switchView('home')})};
+$('undoBtn').onclick=()=>{const last=records().at(-1);if(!last)return;last.deleted=true;redoStack.push(last.id);persist();renderHome()};
+$('redoBtn').onclick=()=>{const id=redoStack.pop(),r=active()?.records.find(x=>x.id===id);if(r){r.deleted=false;persist()}renderHome()};
+function metric(content,label){return `<div class="stat"><strong>${esc(content)}</strong><small>${esc(label)}</small></div>`}
+function distRows(sec){return ORDER.map(s=>{const n=sec.symbols[s],pro=sec.n?100*n/sec.n:0;return `<div class="grade-row"><span class="grade-symbol ${gradeClass(s)}">${s}</span><div class="grade-track"><div class="grade-fill ${gradeClass(s)}" style="width:${pro.toFixed(1)}%"></div></div><span class="grade-count">${n} · ${pct(n,sec.n)}</span></div>`}).join('')}
+function zoneGrid(counts){const vals=['4','3','2','5','6','1'];const mx=Math.max(1,...Object.values(counts));return `<div class="zone-grid">${vals.map(z=>{const n=counts[z]||0,cl=n/mx>=.67?'hot':n/mx>=.33?'mid':'low';return `<div class="zone-cell ${cl}"><b>${z}</b><small>${n} azioni</small></div>`}).join('')}</div>`}
+function summaryCards(sec){return `<div class="metric-grid">${sec.summary.main.map(([l,v])=>metric(v,l)).join('')}</div>`}
+function setMatrix(r){const m=active();const sets=Array.from({length:m.set},(_,i)=>i+1);return `<div class="stat-section"><h3>Confronto tra set</h3><div class="score-timeline"><table class="set-table"><thead><tr><th>Set</th><th>Ric. positive</th><th>Ace</th><th>Att. punti</th><th>Eff. attacco</th></tr></thead><tbody>${sets.map(n=>{const d=dataFor(m,String(n)),re=d.sections.reception,se=d.sections.serve,at=d.sections.attack;return `<tr><td>${n}</td><td>${re.n?pct(re.symbols['#']+re.symbols['+'],re.n):'—'}</td><td>${se.outcomes.ace||0}</td><td>${at.outcomes.punto||0}</td><td>${at.n?pct((at.outcomes.punto||0)-(at.outcomes.errore||0)-(at.outcomes.murato||0),at.n):'—'}</td></tr>`}).join('')}</tbody></table></div></div>`}
+function renderLegend(){return `<div class="sub"><b>Scala personalizzata, non codifica ufficiale DataVolley.</b> Sono cinque simboli, senza !. La posizione di alzata stimata è a circa 1,2 m dalla rete verso zona 2/3.</div>${Object.keys(TYPES).map(t=>`<p><b>${TYPES[t]}</b></p>${ORDER.map(s=>`<div class="kv"><span><span class="pill-grade">${s}</span> ${esc(NOTES[t][s])}</span></div>`).join('')}`).join('')}<p class="small">Ricezione: soglie indicative per Alta (1,2 / 2,5 / 4 m), Tesa (1,5 / 3 m) e Bassa (1,7 m). L’altezza è selezionata, non misurata. Attacco: Muro toccato = /, Difeso = -, Murato ed Errore = =; la statistica separa sempre le due cause. Battuta: Insidiosa e Vincente indiretta = +. Il voto può essere corretto per ogni azione nello storico.</p>`}
+function historicalMatrix(){
+  if(!store.matches.length)return '';
+  const matches=store.matches.slice(0,12);
+  return `<div class="stat-section"><h3>Confronto tra partite</h3><p class="small">Storico personale, fino alle ultime 12 partite salvate su questo dispositivo.</p><div class="score-timeline"><table class="set-table"><thead><tr><th>Partita</th><th>Azioni</th><th>Ric. positive</th><th>Att. eff.</th><th>Ace</th></tr></thead><tbody>${matches.map(m=>{
+    const d=dataFor(m),re=d.sections.reception,at=d.sections.attack,se=d.sections.serve;
+    const positive=re.n?pct(re.symbols['#']+re.symbols['+'],re.n):'—';
+    const efficiency=at.n?pct((at.outcomes.punto||0)-(at.outcomes.errore||0)-(at.outcomes.murato||0),at.n):'—';
+    return `<tr><td title="${esc(m.opponent)}">${esc(String(m.opponent).slice(0,16))}</td><td>${d.total}</td><td>${positive}</td><td>${efficiency}</td><td>${se.outcomes.ace||0}</td></tr>`;
+  }).join('')}</tbody></table></div></div>`
+}
+function renderAnalytics(){const m=active();if(!m)return;const el=$('setFilter'),prev=el.value;el.innerHTML='<option value="all">Tutti i set</option>'+Array.from({length:m.set},(_,i)=>`<option value="${i+1}">Set ${i+1}</option>`).join('');el.value=Array.from(el.options).some(x=>x.value===prev)?prev:'all';drawAnalytics()}
+function drawAnalytics(){const d=dataFor(active(),$('setFilter').value);let html=`<div class="stat-section"><h3>Panoramica</h3><div class="grid3">${metric(d.total,'Azioni totali')}${metric(records().filter(r=>ORDER.includes(r.symbolOverride)).length,'Voti corretti*')}${metric(active().set,'Set creati')}</div><p class="small">* Numero di voti corretti nell’intera partita. I simboli automatici delle ricezioni sono <b>stime</b> e non osservazioni certe.</p></div>`;
+  for(const t of Object.keys(TYPES)){
+    const sec=d.sections[t];html+=`<div class="stat-section"><h3>${TYPES[t]} <span class="under-title">· ${sec.n} azioni</span></h3>`;
+    if(!sec.n){html+='<p class="sub">Nessuna azione registrata.</p></div>';continue}
+    html+=summaryCards(sec)+'<h3>Distribuzione voti # + / - =</h3>'+distRows(sec)+'<h3 style="margin-top:20px">Esiti osservati</h3>';
+    for(const [v,n] of Object.entries(sec.outcomes))html+=`<div class="kv"><span>${esc(nameOutcome({type:t,outcome:v}))}</span><b>${n} · ${pct(n,sec.n)}</b></div>`;
+    const z=t==='reception'?sec.starts:sec.ends;html+=`<h3 style="margin-top:20px">${t==='reception'?'Zone di ricezione':'Zone di destinazione'}</h3>`+zoneGrid(z);
+    if(z['Fuori campo'])html+=`<div class="small">Fuori campo: ${z['Fuori campo']} azioni.</div>`;
+    if(t==='reception')html+='<p class="small">Indice ricezione 0–3: # = 3, + = 2, / = 1, - e = = 0. Indicatore personalizzato e orientativo.</p>';
+    if(t==='attack')html+='<p class="small">Efficienza: (punti - errori - muri punto subiti) / attacchi. Il muro toccato ma rigiocato non è un errore.</p>';
+    html+='</div>';
+  }
+  html+=setMatrix(d.records)+historicalMatrix();$('analyticsContent').innerHTML=html;
+}
+$('setFilter').onchange=drawAnalytics;
+$('showLegend').onclick=()=>{$('legendContent').innerHTML=renderLegend();$('legendContent').classList.toggle('hidden');$('showLegend').textContent=$('legendContent').classList.contains('hidden')?'Vedi legenda e regole':'Nascondi legenda'};
+function renderHistory(){const r=records().slice().reverse(),list=$('recordList');list.replaceChildren();if(!r.length)list.innerHTML='<p class="sub">Nessuna azione registrata.</p>';
+  for(const a of r){const d=document.createElement('div');d.className='record';const detail=document.createElement('div');detail.className='record-main';const sc=rating(a);detail.innerHTML=`<div class="record-title"><b>${esc(TYPES[a.type])}</b> · <span class="pill-grade ${gradeClass(sc.s)}" title="${sc.manual?'Corretto':'Automatico'}">${sc.s}</span> ${esc(nameOutcome(a))}</div><div class="record-meta">Set ${a.set} · ${esc(a.startZone||zone(a.start))} → ${esc(a.endZone||zone(a.end))} · ${sc.manual?'Voto corretto':'Auto'}</div>`;const b=document.createElement('button');b.className='muted';b.textContent='Modifica';b.disabled=active().finished;b.onclick=()=>openEdit(a.id);d.append(detail,b);list.append(d)}
+  const past=$('pastMatches');past.replaceChildren();for(const m of store.matches){const d=document.createElement('div');d.className='record';const t=document.createElement('div');t.innerHTML=`<b>${esc(m.opponent)}</b><div class="small">${esc(m.date)} · ${records(m).length} azioni · ${m.finished?'Terminata':'In corso'}</div>`;const b=document.createElement('button');b.textContent=m.id===store.active?'Attiva':'Apri';b.disabled=m.id===store.active;b.onclick=()=>{store.active=m.id;redoStack=[];persist();switchView('home')};d.append(t,b);past.append(d)}}
+function openEdit(id){const a=active()?.records.find(x=>x.id===id);if(!a)return;editId=id;$('editSummary').textContent=`${TYPES[a.type]} · Set ${a.set} · ${a.startZone||zone(a.start)} → ${a.endZone||zone(a.end)}`;let opts=OPTIONS[a.type].slice();if(a.type==='reception')opts.push(['errore_oltre_rete','Errore oltre rete']);$('editOutcome').innerHTML=opts.map(([v,n])=>`<option value="${v}">${esc(n)}</option>`).join('');$('editOutcome').value=a.outcome;
+  $('editSymbol').innerHTML='<option value="">Automatico (consigliato)</option>'+ORDER.map(s=>`<option value="${s}">${s} — ${esc(NOTES[a.type][s])}</option>`).join('');$('editSymbol').value=a.symbolOverride||'';
+  function updatePreview(){const tmp={...a,outcome:$('editOutcome').value};const calc=ratingAuto(tmp);$('editAutoHint').textContent='Voto automatico: '+calc.s+' · '+calc.why}updatePreview();$('editOutcome').onchange=updatePreview;
+  $('editDialog').showModal()}
+$('saveEdit').onclick=()=>{const a=active()?.records.find(r=>r.id===editId);if(a){a.outcome=$('editOutcome').value;const o=$('editSymbol').value;if(ORDER.includes(o))a.symbolOverride=o;else delete a.symbolOverride;persist();renderHistory()}$('editDialog').close()};
+$('deleteEdit').onclick=()=>{const id=editId;$('editDialog').close();confirmAction('Eliminare questa azione?','La registrazione non comparirà nelle statistiche.','Elimina',()=>{const a=active()?.records.find(r=>r.id===id);if(a){a.deleted=true;persist();renderHistory()}})};
+$('closeEdit').onclick=()=>$('editDialog').close();
+function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000)}
+function pdfExport(scope){const m=active();if(!m)return alert('Non ci sono partite da esportare.');try{if(!window.VolleyPdf)throw new Error('Modulo PDF non disponibile');const filter=scope||'all',report=dataFor(m,filter);const file=window.VolleyPdf.generate({match:m,report,filter,types:TYPES,options:OPTIONS,order:ORDER,pct,rating,nameOutcome});const label=String(m.opponent).normalize('NFKD').replace(/[^a-zA-Z0-9_-]/g,'-').replace(/-+/g,'-').slice(0,40)||'partita';downloadBlob(new Blob([file],{type:'application/pdf'}),'scout-'+label+'-'+m.date+(filter==='all'?'':'-set-'+filter)+'.pdf')}catch(e){console.error(e);alert('Errore nell’esportazione PDF: '+e.message)}}
+$('exportPdf').onclick=()=>pdfExport($('setFilter').value);
+$('exportPdfSettings').onclick=()=>{if(!active())return alert('Nessuna partita salvata.');$('settings').close();pdfExport('all')};
+$('settingsBtn').onclick=()=>$('settings').showModal();$('closeSettings').onclick=()=>$('settings').close();
+$('exportBtn').onclick=()=>downloadBlob(new Blob([JSON.stringify(store,null,2)],{type:'application/json'}),'scout-volley-backup-'+today()+'.json');
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.matches))throw new Error('invalid JSON');$('settings').close();confirmAction('Importare il backup?','L’archivio importato sostituirà tutte le partite su questo dispositivo.','Importa',()=>{store=x;redoStack=[];persist();switchView(active()?'home':'setup')})}catch{alert('Questo file non è un backup JSON valido.')}e.target.value=''};
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>switchView(b.dataset.tab));
+setZones();$('matchDate').value=today();if(active())switchView('home');else switchView('setup');$('startBtn').disabled=false;$('bootWarning').classList.add('hidden');$('bootReady').classList.remove('hidden');
+if('serviceWorker' in navigator && /^https?:/.test(location.protocol))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+})();
+
+</script></body></html>

@@ -1,0 +1,55 @@
+SCOUT PERSONALE VOLLEY - versione 1.5
+======================================
+
+PRIMA APERTURA
+- Da computer: apri index.html in un browser recente.
+- Da smartphone: pubblica tutti i file della cartella su hosting HTTPS
+  (es. Netlify Drop), poi apri quell'indirizzo nel browser.
+- Una volta pubblicata, puoi aggiungere la pagina alla schermata Home.
+- La web app conserva dati nel browser locale; non c'e sincronizzazione
+  tra dispositivi o account. Il PDF e un report, non un backup.
+- Per mettere al sicuro o trasferire lo storico usa Impostazioni > Esporta JSON.
+
+COME REGISTRARE
+- Nuova partita: scegli i fondamentali da scoutizzare.
+- Tocca Ricezione/Battuta/Attacco.
+- Trascina sul campo dalla partenza all'arrivo della palla.
+- Scegli esito (se necessario): l'app salva e torna ai 3 pulsanti.
+- Ricezione oltre rete: errore automatico secondo la regola personalizzata.
+- Set successivo, termina/riapri partita, annulla e ripristina sono nella home.
+
+STATISTICHE, SIMBOLI E CORREZIONI
+- Vengono visualizzati esiti, # + / - =, percentuali, zone, confronto set.
+- Voti di ricezione: STIME da arrivo + categoria Alta/Tesa/Bassa.
+  Non si ricava la velocita reale della palla dal gesto con il dito.
+- Voti di battuta e attacco: regole basate sugli esiti osservati.
+- E' una convenzione personalizzata a 5 simboli, non un export DataVolley.
+- Nello Storico > Modifica puoi correggere l'esito e/o il voto di un'azione.
+- L'efficienza in attacco usa punti, errori e muri punto distinti.
+
+PDF
+- Statistiche > Esporta PDF: crea un report PDF scaricabile sul dispositivo.
+- Se selezioni un set, il PDF comprende solo quel set.
+- Impostazioni > Esporta PDF partita: report dell'intera partita.
+- Il PDF contiene riepilogo, statistiche, distribuzioni, zone, set e
+  registro dettagliato delle azioni. Funziona senza servizi remoti.
+- Il PDF NON puo essere reimportato come archivio; usa backup JSON.
+
+NOTE
+- I dati si trovano in localStorage e sono mantenuti dalla versione 1.2.
+- Evita modalita anonima e di cancellare i dati del sito senza backup.
+- Questa e una prima versione da collaudare in una vera partita.
+
+NOVITA V1.5 — SCOUT SENZA BIAS DI VALUTAZIONE
+- Durante il disegno in ricezione NON compaiono aree colorate, anteprime o voti # + / - =.
+- Dopo il disegno, la schermata mostra soltanto Alta / Tesa / Bassa / Errore.
+- Alla selezione, si salva subito e si torna ai tre fondamentali.
+- Anche il riepilogo 'Ultima azione' non mostra piu simboli di valutazione.
+- Il simbolo automatico e calcolato usando destinazione + Alta/Tesa/Bassa e
+  resta consultabile in Statistiche, Storico e PDF, NON durante l'inserimento.
+- La regola ricezione direttamente oltre rete = errore rimane invariata.
+- Tutte le funzioni V1.4 (colori vivaci, statistiche, PDF, undo/redo e backup) sono conservate.
+
+AGGIORNAMENTO HOSTING: sostituisci i file del vecchio sito con quelli di questa cartella.
+La nuova cache offline v1-5 viene attivata al prossimo aggiornamento del sito.
+Prima di aggiornare, esporta sempre il backup JSON da Impostazioni.
