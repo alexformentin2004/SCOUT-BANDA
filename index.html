@@ -54,7 +54,27 @@ input[type=text],input[type=date],select{background:#13344f;border-color:#6393b3
 .grade-hash{background:#099e74!important}.grade-plus{background:#54ac35!important}.grade-slash{background:#d39b20!important}.grade-minus{background:#d56d3e!important}.grade-equal{background:#cc3c5c!important}
 .grade-symbol,.pill-grade{color:#fff}
 @media(max-width:390px){#fundamentalButtons .tile{min-height:99px;padding:10px 3px}}
-</style></head><body><main class="wrap"><header><div><div class="title">🏐 Scout Personale <span style="font-size:12px;font-weight:500;opacity:.75">v1.5</span></div><div class="small">Ricezione · Battuta · Attacco</div></div><button id="settingsBtn" class="muted" aria-label="Impostazioni">⚙️</button></header>
+
+/* V1.6 - archivio con reset e cancellazioni sicure, ottimizzato per iPhone */
+.archive-card{border:1px solid #648ba6;border-radius:17px;background:#1c3d59;padding:13px;margin:13px 0}
+.archive-card.current{border-color:#46cdb1;background:#204a60}
+.archive-name{font-size:15px;font-weight:750;overflow-wrap:anywhere}
+.archive-meta{font-size:12px;color:#dbebfa;line-height:1.6;margin-top:4px}
+.archive-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:11px}
+.archive-tools button{min-height:44px;padding:10px 8px;font-size:13px}
+.archive-details{margin-top:13px;padding-top:11px;border-top:1px solid #597c99}
+.archive-tip{font-size:12px;line-height:1.45;color:#e0f0fa;margin-bottom:10px}
+.archive-set{padding:12px 0;border-bottom:1px solid #52748f}
+.archive-set:last-of-type{border-bottom:0}
+.archive-set-header{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:8px}
+.archive-set-count{font-size:12px;color:#d8ebfc}
+.archive-set-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.archive-set-tools button{min-height:44px;font-size:13px;padding:9px 6px}
+.archive-danger{background:#cf3d58}
+.archive-warning{background:#b47722}
+.archive-backup-hint{font-size:12px;margin-top:10px;color:#ffe0b2}
+@media(max-width:375px){.archive-card{padding:10px}.archive-set-tools button{font-size:12px;padding:9px 4px}}
+</style></head><body><main class="wrap"><header><div><div class="title">🏐 Scout Personale <span style="font-size:12px;font-weight:500;opacity:.75">v1.6</span></div><div class="small">Ricezione · Battuta · Attacco</div></div><button id="settingsBtn" class="muted" aria-label="Impostazioni">⚙️</button></header>
 <section id="setup" class="panel"><h2>Nuova partita</h2><div class="row" style="margin-bottom:12px"><input id="opponent" type="text" placeholder="Squadra avversaria" style="flex:1"><input id="matchDate" type="date"></div><div class="sub">Cosa vuoi scoutizzare?</div><div class="row" style="margin:12px 0 18px"><label><input id="enableReception" type="checkbox" checked>Ricezione</label><label><input id="enableServe" type="checkbox" checked>Battuta</label><label><input id="enableAttack" type="checkbox" checked>Attacco</label></div><div id="bootWarning" class="boot-warning" role="status">⚠️ Questa anteprima non ha ancora avviato il motore dell’app. Se questo messaggio rimane visibile, il visualizzatore non consente JavaScript: il pulsante non può funzionare qui. Usa il pacchetto ZIP su un sito HTTPS (ad esempio Netlify Drop).</div><button id="startBtn" class="primary" style="width:100%" disabled>Inizia partita</button><div id="bootReady" class="ready-indicator hidden" role="status">✓ App pronta: puoi iniziare la partita.</div><p class="sub" id="resumeBox"></p></section>
 <section id="home" class="hidden"><div class="panel"><div class="row spread"><div><div class="small" id="matchLabel"></div><h2 id="setLabel">Set 1</h2></div><div class="row"><button id="newMatch" class="muted">+ Nuova partita</button><button id="nextSet" class="muted">Set successivo →</button></div></div><div class="grid3" id="quickStats"></div></div><div class="panel"><h2>Registra un'azione</h2><div id="fundamentalButtons" class="grid3"></div><div style="margin-top:14px" class="row"><button id="undoBtn" class="muted">↶ Annulla</button><button id="redoBtn" class="muted">↷ Ripristina</button><button id="endMatch" class="muted" style="margin-left:auto">Termina partita</button></div><div id="lastRecord" class="sub" style="margin-top:12px"></div></div></section>
 <section id="drawing" class="hidden"><div class="panel"><div class="row spread"><h2 id="drawingTitle"></h2><button class="muted" id="backDrawing">← Indietro</button></div><div class="status" id="drawingStatus">Trascina il dito dal punto di partenza al punto di arrivo.</div><div class="court-holder"><svg id="court" viewBox="0 0 360 590" role="img" aria-label="Campo di pallavolo interattivo"><rect x="8" y="6" width="344" height="578" rx="12" fill="#17334e"/><rect id="awayCourt" x="55" y="65" width="250" height="210" fill="#d99e65" stroke="white" stroke-width="2"/><rect id="ourCourt" x="55" y="275" width="250" height="210" fill="#e9b875" stroke="white" stroke-width="2"/><path id="attackLines" d="M55 205H305 M55 345H305" stroke="white" stroke-width="2"/><path d="M55 275H305" stroke="#203449" stroke-width="6"/><text x="180" y="47" text-anchor="middle" font-size="13" fill="white">AVVERSARI</text><text x="180" y="511" text-anchor="middle" font-size="13" fill="white">NOI</text><text x="180" y="558" text-anchor="middle" font-size="11" fill="#9bb9d5">Le aree fuori dalle linee sono selezionabili</text><g id="zones" fill="#593d22" fill-opacity=".6" font-size="19" font-weight="700" text-anchor="middle"></g><path id="rawPath" fill="none" stroke="#9ad7ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".45"/><path id="drawPath" fill="none" stroke="#246bfa" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle id="startDot" r="7" fill="#2563eb" stroke="white" stroke-width="2" visibility="hidden"/><circle id="endDot" r="8" fill="#21a366" stroke="white" stroke-width="2" visibility="hidden"/></svg></div><div class="row spread"><span id="zoneReadout" class="legend">Nessuna traiettoria</span><button id="redrawBtn" class="muted">↻ Ridisegna</button></div><div id="outcomePanel" class="hidden" style="margin-top:17px"><h2 id="outcomeTitle">Seleziona esito</h2><div id="outcomeButtons" class="actions"></div><div id="outcomeNote" class="notice" style="margin-top:8px"></div></div></div></section>
@@ -65,8 +85,12 @@ input[type=text],input[type=date],select{background:#13344f;border-color:#6393b3
 <section id="analytics" class="hidden"><div class="panel"><h2>Statistiche della partita</h2><div class="row" style="margin-bottom:13px"><label>Set <select id="setFilter"></select></label></div><div class="row" style="margin:8px 0 17px"><button class="primary" id="exportPdf">⬇ Esporta PDF</button><span class="small">Il PDF rispetta il filtro del set.</span></div>
 <div class="insight-note"><b>Come vengono calcolati i simboli?</b><div class="small">Ricezione: stima da destinazione e Alta/Tesa/Bassa. Battuta e attacco: esito osservato. Tocca <b>Modifica</b> nello storico per cambiare il voto senza alterare l'esito.</div><button class="muted" id="showLegend" style="margin-top:9px;font-size:12px">Vedi legenda e regole</button><div id="legendContent" class="hidden" style="margin-top:10px"></div></div>
 <div id="analyticsContent"></div></div></section>
-<section id="history" class="hidden"><div class="panel"><h2>Azioni registrate</h2><div id="recordList"></div></div><div class="panel"><h2>Partite precedenti</h2><div id="pastMatches"></div></div></section>
-<nav id="nav" class="tabs hidden"><button data-tab="home" class="active">Scout</button><button data-tab="analytics">Statistiche</button><button data-tab="history">Storico</button></nav><footer>I dati rimangono su questo dispositivo. Esporta regolarmente una copia di sicurezza.</footer></main>
+<section id="history" class="hidden">
+<div class="panel"><h2>Azioni registrate</h2><div id="recordList"></div></div>
+<div class="panel"><div class="row spread"><h2 style="margin:0">Archivio partite</h2><button id="archiveBackup" class="muted" style="font-size:12px">⬇ Backup JSON</button></div>
+<p class="sub" style="margin-top:12px">Tocca <b>Gestisci</b> su una partita per svuotare i set, eliminare set o cancellare la partita. Per sicurezza verrà chiesta una conferma.</p><div id="pastMatches"></div></div>
+</section>
+<nav id="nav" class="tabs hidden"><button data-tab="home" class="active">Scout</button><button data-tab="analytics">Statistiche</button><button data-tab="history">Archivio</button></nav><footer>I dati rimangono su questo dispositivo. Esporta regolarmente una copia di sicurezza.</footer></main>
 <div id="confirmOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
 <div class="confirm-card"><h2 id="confirmTitle">Conferma</h2><p id="confirmMessage"></p><div class="confirm-actions"><button id="confirmCancel" class="muted">Annulla</button><button id="confirmProceed" class="primary">Conferma</button></div></div></div>
 <dialog id="settings"><h2>Impostazioni e backup</h2><p class="sub">I dati vengono salvati automaticamente sul dispositivo. Non vengono sincronizzati fra telefoni.</p><div class="row"><button id="exportBtn" class="primary">Esporta JSON</button><button id="exportPdfSettings" class="good">Esporta PDF partita</button><button id="importBtn" class="muted">Importa JSON</button><input id="importFile" type="file" accept=".json,application/json" class="hidden"></div><p class="notice">L'importazione sostituisce l'archivio locale: esporta prima un backup.</p><button id="closeSettings" style="width:100%;margin-top:12px">Chiudi</button></dialog>
@@ -151,7 +175,7 @@ return {generate};
 })();
 
 </script><script>
-/* Scout Personale v1.5 | modalita scout neutrale: niente voto durante registrazione */
+/* Scout Personale v1.6 | gestione sicura archivio / set / partite */
 (() => {
 'use strict';
 const KEY = 'volley-scout-personal-v1';
@@ -179,7 +203,7 @@ const idgen=()=>String(Date.now())+'-'+Math.random().toString(36).slice(2,8);
 const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
 function emptyStore(){return {schema:2,active:null,matches:[]}}
 function load(){try {const x=JSON.parse(localStorage.getItem(KEY));return x && Array.isArray(x.matches) ? x : emptyStore()}catch{return emptyStore()}}
-let store=load(), currentType='', pts=[], pathDone=false, drawing=false, view='setup', editId=null, redoStack=[], confirming=null;
+let store=load(), currentType='', pts=[], pathDone=false, drawing=false, view='setup', editId=null, redoStack=[], confirming=null, archiveExpandedId=null;
 function persist(){try{store.schema=2;localStorage.setItem(KEY,JSON.stringify(store))}catch(e){alert('Impossibile salvare sul dispositivo. Esporta immediatamente il backup JSON.')}}
 function active(){return store.matches.find(m=>m.id===store.active)}
 function records(m=active()){return (m?.records||[]).filter(r=>!r.deleted)}
@@ -226,7 +250,7 @@ function dataFor(m=active(),set='all'){
   }
   return {sections,records:list,total:list.length};
 }
-function confirmAction(title,message,confirmLabel,fn){confirming=fn;$('confirmTitle').textContent=title;$('confirmMessage').textContent=message;$('confirmProceed').textContent=confirmLabel;$('confirmOverlay').classList.remove('hidden')}
+function confirmAction(title,message,confirmLabel,fn,destructive=false){confirming=fn;$('confirmTitle').textContent=title;$('confirmMessage').textContent=message;$('confirmProceed').textContent=confirmLabel;$('confirmProceed').className=destructive?'bad':'primary';$('confirmOverlay').classList.remove('hidden')}
 function dismissConfirm(){confirming=null;$('confirmOverlay').classList.add('hidden')}
 $('confirmCancel').onclick=dismissConfirm;
 $('confirmProceed').onclick=()=>{const fn=confirming;dismissConfirm();if(fn)fn()};
@@ -302,9 +326,107 @@ function drawAnalytics(){const d=dataFor(active(),$('setFilter').value);let html
 }
 $('setFilter').onchange=drawAnalytics;
 $('showLegend').onclick=()=>{$('legendContent').innerHTML=renderLegend();$('legendContent').classList.toggle('hidden');$('showLegend').textContent=$('legendContent').classList.contains('hidden')?'Vedi legenda e regole':'Nascondi legenda'};
-function renderHistory(){const r=records().slice().reverse(),list=$('recordList');list.replaceChildren();if(!r.length)list.innerHTML='<p class="sub">Nessuna azione registrata.</p>';
-  for(const a of r){const d=document.createElement('div');d.className='record';const detail=document.createElement('div');detail.className='record-main';const sc=rating(a);detail.innerHTML=`<div class="record-title"><b>${esc(TYPES[a.type])}</b> · <span class="pill-grade ${gradeClass(sc.s)}" title="${sc.manual?'Corretto':'Automatico'}">${sc.s}</span> ${esc(nameOutcome(a))}</div><div class="record-meta">Set ${a.set} · ${esc(a.startZone||zone(a.start))} → ${esc(a.endZone||zone(a.end))} · ${sc.manual?'Voto corretto':'Auto'}</div>`;const b=document.createElement('button');b.className='muted';b.textContent='Modifica';b.disabled=active().finished;b.onclick=()=>openEdit(a.id);d.append(detail,b);list.append(d)}
-  const past=$('pastMatches');past.replaceChildren();for(const m of store.matches){const d=document.createElement('div');d.className='record';const t=document.createElement('div');t.innerHTML=`<b>${esc(m.opponent)}</b><div class="small">${esc(m.date)} · ${records(m).length} azioni · ${m.finished?'Terminata':'In corso'}</div>`;const b=document.createElement('button');b.textContent=m.id===store.active?'Attiva':'Apri';b.disabled=m.id===store.active;b.onclick=()=>{store.active=m.id;redoStack=[];persist();switchView('home')};d.append(t,b);past.append(d)}}
+function afterArchiveMutation(affectedMatchId){
+  if(store.active===affectedMatchId)redoStack=[];
+  if(!store.matches.some(m=>m.id===store.active)){store.active=store.matches[0]?.id||null;redoStack=[];}
+  persist();
+  if(active())switchView('history');else switchView('setup');
+}
+function resetSet(matchId,setNumber){
+  const m=store.matches.find(x=>x.id===matchId);if(!m)return;
+  const n=records(m).filter(a=>Number(a.set)===setNumber).length;
+  confirmAction('Svuotare il set '+setNumber+'?',
+    'Partita: '+m.opponent+'. Verranno eliminate '+n+' azioni dal set '+setNumber+'. Il set rimarrà nell’archivio, ma vuoto. La cancellazione è definitiva senza un backup JSON.',
+    'Svuota set',()=>{
+      const target=store.matches.find(x=>x.id===matchId);if(!target)return;
+      target.records=(target.records||[]).filter(a=>Number(a.set)!==setNumber);
+      afterArchiveMutation(matchId);
+    },true);
+}
+function deleteSet(matchId,setNumber){
+  const m=store.matches.find(x=>x.id===matchId);if(!m||Number(m.set)<=1)return;
+  const n=records(m).filter(a=>Number(a.set)===setNumber).length;
+  confirmAction('Eliminare il set '+setNumber+'?',
+    'Partita: '+m.opponent+'. Il set '+setNumber+' e le sue '+n+' azioni saranno eliminati. I set successivi scaleranno di numero. La cancellazione è definitiva senza un backup JSON.',
+    'Elimina set',()=>{
+      const target=store.matches.find(x=>x.id===matchId);if(!target||Number(target.set)<=1)return;
+      target.records=(target.records||[]).filter(a=>Number(a.set)!==setNumber);
+      target.records.forEach(a=>{if(Number(a.set)>setNumber)a.set=Number(a.set)-1});
+      target.set=Math.max(1,Number(target.set)-1);
+      afterArchiveMutation(matchId);
+    },true);
+}
+function resetMatch(matchId){
+  const m=store.matches.find(x=>x.id===matchId);if(!m)return;
+  const n=records(m).length;
+  confirmAction('Resettare questa partita?',
+    'Partita: '+m.opponent+' del '+m.date+'. Verranno eliminate tutte le '+n+' azioni e i set creati. La partita resterà disponibile come nuova (Set 1). Operazione definitiva senza backup JSON.',
+    'Resetta partita',()=>{
+      const target=store.matches.find(x=>x.id===matchId);if(!target)return;
+      target.records=[];target.set=1;target.finished=false;
+      afterArchiveMutation(matchId);
+    },true);
+}
+function deleteMatch(matchId){
+  const m=store.matches.find(x=>x.id===matchId);if(!m)return;
+  confirmAction('Eliminare tutta la partita?',
+    'Partita: '+m.opponent+' del '+m.date+'. Verranno eliminati definitivamente la partita, tutti i suoi set e '+records(m).length+' azioni. Per recuperare i dati servirà un backup JSON precedente.',
+    'Elimina partita',()=>{
+      store.matches=store.matches.filter(x=>x.id!==matchId);
+      if(archiveExpandedId===matchId)archiveExpandedId=null;
+      afterArchiveMutation(matchId);
+    },true);
+}
+function archiveButton(label,className,fn,disabled=false){
+  const b=document.createElement('button');b.type='button';b.textContent=label;b.className=className;b.disabled=disabled;b.onclick=fn;return b;
+}
+function renderHistory(){
+  const mActive=active(),r=records(mActive).slice().reverse(),list=$('recordList');list.replaceChildren();
+  if(!r.length)list.innerHTML='<p class="sub">Nessuna azione registrata in questa partita.</p>';
+  for(const a of r){
+    const d=document.createElement('div');d.className='record';const detail=document.createElement('div');detail.className='record-main';const sc=rating(a);
+    detail.innerHTML=`<div class="record-title"><b>${esc(TYPES[a.type])}</b> · <span class="pill-grade ${gradeClass(sc.s)}" title="${sc.manual?'Corretto':'Automatico'}">${sc.s}</span> ${esc(nameOutcome(a))}</div><div class="record-meta">Set ${a.set} · ${esc(a.startZone||zone(a.start))} → ${esc(a.endZone||zone(a.end))} · ${sc.manual?'Voto corretto':'Auto'}</div>`;
+    const b=archiveButton('Modifica','muted',()=>openEdit(a.id),!!mActive?.finished);d.append(detail,b);list.append(d);
+  }
+  const past=$('pastMatches');past.replaceChildren();
+  if(!store.matches.length){past.innerHTML='<p class="sub">L’archivio è vuoto. Crea una nuova partita per iniziare.</p>';return}
+  for(const m of store.matches){
+    const card=document.createElement('div');card.className='archive-card'+(m.id===store.active?' current':'');
+    const title=document.createElement('div');title.className='archive-name';title.textContent=m.opponent;
+    const meta=document.createElement('div');meta.className='archive-meta';meta.textContent=m.date+' · '+records(m).length+' azioni · '+m.set+' set · '+(m.finished?'Terminata':'In corso')+(m.id===store.active?' · ATTIVA':'');
+    const actions=document.createElement('div');actions.className='archive-tools';
+    actions.append(
+      archiveButton(m.id===store.active?'Partita attiva':'Apri partita','muted',()=>{store.active=m.id;redoStack=[];persist();switchView('home')},m.id===store.active),
+      archiveButton(archiveExpandedId===m.id?'Chiudi gestione':'⚙ Gestisci','primary',()=>{archiveExpandedId=archiveExpandedId===m.id?null:m.id;renderHistory()})
+    );
+    card.append(title,meta,actions);
+    if(archiveExpandedId===m.id){
+      const details=document.createElement('div');details.className='archive-details';
+      const tip=document.createElement('div');tip.className='archive-tip';tip.textContent='Svuota = elimina le azioni, ma mantiene il set. Elimina = rimuove il set e rinumera i successivi.';details.append(tip);
+      const sets=Math.max(1,Number(m.set)||1);
+      for(let n=1;n<=sets;n++){
+        const row=document.createElement('div');row.className='archive-set';
+        const header=document.createElement('div');header.className='archive-set-header';
+        const label=document.createElement('strong');label.textContent='Set '+n;
+        const count=document.createElement('span');count.className='archive-set-count';count.textContent=records(m).filter(a=>Number(a.set)===n).length+' azioni';
+        header.append(label,count);
+        const controls=document.createElement('div');controls.className='archive-set-tools';
+        controls.append(
+          archiveButton('↻ Svuota set','archive-warning',()=>resetSet(m.id,n)),
+          archiveButton('🗑 Elimina set','archive-danger',()=>deleteSet(m.id,n),sets===1)
+        );row.append(header,controls);details.append(row);
+      }
+      const all=document.createElement('div');all.className='archive-tools';
+      all.append(
+        archiveButton('↻ Resetta partita','archive-warning',()=>resetMatch(m.id)),
+        archiveButton('🗑 Elimina partita','archive-danger',()=>deleteMatch(m.id))
+      );details.append(all);
+      const backup=document.createElement('p');backup.className='archive-backup-hint';backup.textContent='Consiglio: usa «Backup JSON» prima di cancellare. I dati eliminati non si recuperano con Annulla.';
+      details.append(backup);card.append(details);
+    }
+    past.append(card);
+  }
+}
 function openEdit(id){const a=active()?.records.find(x=>x.id===id);if(!a)return;editId=id;$('editSummary').textContent=`${TYPES[a.type]} · Set ${a.set} · ${a.startZone||zone(a.start)} → ${a.endZone||zone(a.end)}`;let opts=OPTIONS[a.type].slice();if(a.type==='reception')opts.push(['errore_oltre_rete','Errore oltre rete']);$('editOutcome').innerHTML=opts.map(([v,n])=>`<option value="${v}">${esc(n)}</option>`).join('');$('editOutcome').value=a.outcome;
   $('editSymbol').innerHTML='<option value="">Automatico (consigliato)</option>'+ORDER.map(s=>`<option value="${s}">${s} — ${esc(NOTES[a.type][s])}</option>`).join('');$('editSymbol').value=a.symbolOverride||'';
   function updatePreview(){const tmp={...a,outcome:$('editOutcome').value};const calc=ratingAuto(tmp);$('editAutoHint').textContent='Voto automatico: '+calc.s+' · '+calc.why}updatePreview();$('editOutcome').onchange=updatePreview;
@@ -318,6 +440,7 @@ $('exportPdf').onclick=()=>pdfExport($('setFilter').value);
 $('exportPdfSettings').onclick=()=>{if(!active())return alert('Nessuna partita salvata.');$('settings').close();pdfExport('all')};
 $('settingsBtn').onclick=()=>$('settings').showModal();$('closeSettings').onclick=()=>$('settings').close();
 $('exportBtn').onclick=()=>downloadBlob(new Blob([JSON.stringify(store,null,2)],{type:'application/json'}),'scout-volley-backup-'+today()+'.json');
+$('archiveBackup').onclick=()=> $('exportBtn').click();
 $('importBtn').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.matches))throw new Error('invalid JSON');$('settings').close();confirmAction('Importare il backup?','L’archivio importato sostituirà tutte le partite su questo dispositivo.','Importa',()=>{store=x;redoStack=[];persist();switchView(active()?'home':'setup')})}catch{alert('Questo file non è un backup JSON valido.')}e.target.value=''};
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>switchView(b.dataset.tab));

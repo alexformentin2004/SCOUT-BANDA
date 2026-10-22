@@ -1,4 +1,4 @@
-/* Scout Personale v1.5 | modalita scout neutrale: niente voto durante registrazione */
+/* Scout Personale v1.6 | gestione sicura archivio / set / partite */
 (() => {
 'use strict';
 const KEY = 'volley-scout-personal-v1';
@@ -26,7 +26,7 @@ const idgen=()=>String(Date.now())+'-'+Math.random().toString(36).slice(2,8);
 const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
 function emptyStore(){return {schema:2,active:null,matches:[]}}
 function load(){try {const x=JSON.parse(localStorage.getItem(KEY));return x && Array.isArray(x.matches) ? x : emptyStore()}catch{return emptyStore()}}
-let store=load(), currentType='', pts=[], pathDone=false, drawing=false, view='setup', editId=null, redoStack=[], confirming=null;
+let store=load(), currentType='', pts=[], pathDone=false, drawing=false, view='setup', editId=null, redoStack=[], confirming=null, archiveExpandedId=null;
 function persist(){try{store.schema=2;localStorage.setItem(KEY,JSON.stringify(store))}catch(e){alert('Impossibile salvare sul dispositivo. Esporta immediatamente il backup JSON.')}}
 function active(){return store.matches.find(m=>m.id===store.active)}
 function records(m=active()){return (m?.records||[]).filter(r=>!r.deleted)}
@@ -73,7 +73,7 @@ function dataFor(m=active(),set='all'){
   }
   return {sections,records:list,total:list.length};
 }
-function confirmAction(title,message,confirmLabel,fn){confirming=fn;$('confirmTitle').textContent=title;$('confirmMessage').textContent=message;$('confirmProceed').textContent=confirmLabel;$('confirmOverlay').classList.remove('hidden')}
+function confirmAction(title,message,confirmLabel,fn,destructive=false){confirming=fn;$('confirmTitle').textContent=title;$('confirmMessage').textContent=message;$('confirmProceed').textContent=confirmLabel;$('confirmProceed').className=destructive?'bad':'primary';$('confirmOverlay').classList.remove('hidden')}
 function dismissConfirm(){confirming=null;$('confirmOverlay').classList.add('hidden')}
 $('confirmCancel').onclick=dismissConfirm;
 $('confirmProceed').onclick=()=>{const fn=confirming;dismissConfirm();if(fn)fn()};
@@ -149,9 +149,107 @@ function drawAnalytics(){const d=dataFor(active(),$('setFilter').value);let html
 }
 $('setFilter').onchange=drawAnalytics;
 $('showLegend').onclick=()=>{$('legendContent').innerHTML=renderLegend();$('legendContent').classList.toggle('hidden');$('showLegend').textContent=$('legendContent').classList.contains('hidden')?'Vedi legenda e regole':'Nascondi legenda'};
-function renderHistory(){const r=records().slice().reverse(),list=$('recordList');list.replaceChildren();if(!r.length)list.innerHTML='<p class="sub">Nessuna azione registrata.</p>';
-  for(const a of r){const d=document.createElement('div');d.className='record';const detail=document.createElement('div');detail.className='record-main';const sc=rating(a);detail.innerHTML=`<div class="record-title"><b>${esc(TYPES[a.type])}</b> · <span class="pill-grade ${gradeClass(sc.s)}" title="${sc.manual?'Corretto':'Automatico'}">${sc.s}</span> ${esc(nameOutcome(a))}</div><div class="record-meta">Set ${a.set} · ${esc(a.startZone||zone(a.start))} → ${esc(a.endZone||zone(a.end))} · ${sc.manual?'Voto corretto':'Auto'}</div>`;const b=document.createElement('button');b.className='muted';b.textContent='Modifica';b.disabled=active().finished;b.onclick=()=>openEdit(a.id);d.append(detail,b);list.append(d)}
-  const past=$('pastMatches');past.replaceChildren();for(const m of store.matches){const d=document.createElement('div');d.className='record';const t=document.createElement('div');t.innerHTML=`<b>${esc(m.opponent)}</b><div class="small">${esc(m.date)} · ${records(m).length} azioni · ${m.finished?'Terminata':'In corso'}</div>`;const b=document.createElement('button');b.textContent=m.id===store.active?'Attiva':'Apri';b.disabled=m.id===store.active;b.onclick=()=>{store.active=m.id;redoStack=[];persist();switchView('home')};d.append(t,b);past.append(d)}}
+function afterArchiveMutation(affectedMatchId){
+  if(store.active===affectedMatchId)redoStack=[];
+  if(!store.matches.some(m=>m.id===store.active)){store.active=store.matches[0]?.id||null;redoStack=[];}
+  persist();
+  if(active())switchView('history');else switchView('setup');
+}
+function resetSet(matchId,setNumber){
+  const m=store.matches.find(x=>x.id===matchId);if(!m)return;
+  const n=records(m).filter(a=>Number(a.set)===setNumber).length;
+  confirmAction('Svuotare il set '+setNumber+'?',
+    'Partita: '+m.opponent+'. Verranno eliminate '+n+' azioni dal set '+setNumber+'. Il set rimarrà nell’archivio, ma vuoto. La cancellazione è definitiva senza un backup JSON.',
+    'Svuota set',()=>{
+      const target=store.matches.find(x=>x.id===matchId);if(!target)return;
+      target.records=(target.records||[]).filter(a=>Number(a.set)!==setNumber);
+      afterArchiveMutation(matchId);
+    },true);
+}
+function deleteSet(matchId,setNumber){
+  const m=store.matches.find(x=>x.id===matchId);if(!m||Number(m.set)<=1)return;
+  const n=records(m).filter(a=>Number(a.set)===setNumber).length;
+  confirmAction('Eliminare il set '+setNumber+'?',
+    'Partita: '+m.opponent+'. Il set '+setNumber+' e le sue '+n+' azioni saranno eliminati. I set successivi scaleranno di numero. La cancellazione è definitiva senza un backup JSON.',
+    'Elimina set',()=>{
+      const target=store.matches.find(x=>x.id===matchId);if(!target||Number(target.set)<=1)return;
+      target.records=(target.records||[]).filter(a=>Number(a.set)!==setNumber);
+      target.records.forEach(a=>{if(Number(a.set)>setNumber)a.set=Number(a.set)-1});
+      target.set=Math.max(1,Number(target.set)-1);
+      afterArchiveMutation(matchId);
+    },true);
+}
+function resetMatch(matchId){
+  const m=store.matches.find(x=>x.id===matchId);if(!m)return;
+  const n=records(m).length;
+  confirmAction('Resettare questa partita?',
+    'Partita: '+m.opponent+' del '+m.date+'. Verranno eliminate tutte le '+n+' azioni e i set creati. La partita resterà disponibile come nuova (Set 1). Operazione definitiva senza backup JSON.',
+    'Resetta partita',()=>{
+      const target=store.matches.find(x=>x.id===matchId);if(!target)return;
+      target.records=[];target.set=1;target.finished=false;
+      afterArchiveMutation(matchId);
+    },true);
+}
+function deleteMatch(matchId){
+  const m=store.matches.find(x=>x.id===matchId);if(!m)return;
+  confirmAction('Eliminare tutta la partita?',
+    'Partita: '+m.opponent+' del '+m.date+'. Verranno eliminati definitivamente la partita, tutti i suoi set e '+records(m).length+' azioni. Per recuperare i dati servirà un backup JSON precedente.',
+    'Elimina partita',()=>{
+      store.matches=store.matches.filter(x=>x.id!==matchId);
+      if(archiveExpandedId===matchId)archiveExpandedId=null;
+      afterArchiveMutation(matchId);
+    },true);
+}
+function archiveButton(label,className,fn,disabled=false){
+  const b=document.createElement('button');b.type='button';b.textContent=label;b.className=className;b.disabled=disabled;b.onclick=fn;return b;
+}
+function renderHistory(){
+  const mActive=active(),r=records(mActive).slice().reverse(),list=$('recordList');list.replaceChildren();
+  if(!r.length)list.innerHTML='<p class="sub">Nessuna azione registrata in questa partita.</p>';
+  for(const a of r){
+    const d=document.createElement('div');d.className='record';const detail=document.createElement('div');detail.className='record-main';const sc=rating(a);
+    detail.innerHTML=`<div class="record-title"><b>${esc(TYPES[a.type])}</b> · <span class="pill-grade ${gradeClass(sc.s)}" title="${sc.manual?'Corretto':'Automatico'}">${sc.s}</span> ${esc(nameOutcome(a))}</div><div class="record-meta">Set ${a.set} · ${esc(a.startZone||zone(a.start))} → ${esc(a.endZone||zone(a.end))} · ${sc.manual?'Voto corretto':'Auto'}</div>`;
+    const b=archiveButton('Modifica','muted',()=>openEdit(a.id),!!mActive?.finished);d.append(detail,b);list.append(d);
+  }
+  const past=$('pastMatches');past.replaceChildren();
+  if(!store.matches.length){past.innerHTML='<p class="sub">L’archivio è vuoto. Crea una nuova partita per iniziare.</p>';return}
+  for(const m of store.matches){
+    const card=document.createElement('div');card.className='archive-card'+(m.id===store.active?' current':'');
+    const title=document.createElement('div');title.className='archive-name';title.textContent=m.opponent;
+    const meta=document.createElement('div');meta.className='archive-meta';meta.textContent=m.date+' · '+records(m).length+' azioni · '+m.set+' set · '+(m.finished?'Terminata':'In corso')+(m.id===store.active?' · ATTIVA':'');
+    const actions=document.createElement('div');actions.className='archive-tools';
+    actions.append(
+      archiveButton(m.id===store.active?'Partita attiva':'Apri partita','muted',()=>{store.active=m.id;redoStack=[];persist();switchView('home')},m.id===store.active),
+      archiveButton(archiveExpandedId===m.id?'Chiudi gestione':'⚙ Gestisci','primary',()=>{archiveExpandedId=archiveExpandedId===m.id?null:m.id;renderHistory()})
+    );
+    card.append(title,meta,actions);
+    if(archiveExpandedId===m.id){
+      const details=document.createElement('div');details.className='archive-details';
+      const tip=document.createElement('div');tip.className='archive-tip';tip.textContent='Svuota = elimina le azioni, ma mantiene il set. Elimina = rimuove il set e rinumera i successivi.';details.append(tip);
+      const sets=Math.max(1,Number(m.set)||1);
+      for(let n=1;n<=sets;n++){
+        const row=document.createElement('div');row.className='archive-set';
+        const header=document.createElement('div');header.className='archive-set-header';
+        const label=document.createElement('strong');label.textContent='Set '+n;
+        const count=document.createElement('span');count.className='archive-set-count';count.textContent=records(m).filter(a=>Number(a.set)===n).length+' azioni';
+        header.append(label,count);
+        const controls=document.createElement('div');controls.className='archive-set-tools';
+        controls.append(
+          archiveButton('↻ Svuota set','archive-warning',()=>resetSet(m.id,n)),
+          archiveButton('🗑 Elimina set','archive-danger',()=>deleteSet(m.id,n),sets===1)
+        );row.append(header,controls);details.append(row);
+      }
+      const all=document.createElement('div');all.className='archive-tools';
+      all.append(
+        archiveButton('↻ Resetta partita','archive-warning',()=>resetMatch(m.id)),
+        archiveButton('🗑 Elimina partita','archive-danger',()=>deleteMatch(m.id))
+      );details.append(all);
+      const backup=document.createElement('p');backup.className='archive-backup-hint';backup.textContent='Consiglio: usa «Backup JSON» prima di cancellare. I dati eliminati non si recuperano con Annulla.';
+      details.append(backup);card.append(details);
+    }
+    past.append(card);
+  }
+}
 function openEdit(id){const a=active()?.records.find(x=>x.id===id);if(!a)return;editId=id;$('editSummary').textContent=`${TYPES[a.type]} · Set ${a.set} · ${a.startZone||zone(a.start)} → ${a.endZone||zone(a.end)}`;let opts=OPTIONS[a.type].slice();if(a.type==='reception')opts.push(['errore_oltre_rete','Errore oltre rete']);$('editOutcome').innerHTML=opts.map(([v,n])=>`<option value="${v}">${esc(n)}</option>`).join('');$('editOutcome').value=a.outcome;
   $('editSymbol').innerHTML='<option value="">Automatico (consigliato)</option>'+ORDER.map(s=>`<option value="${s}">${s} — ${esc(NOTES[a.type][s])}</option>`).join('');$('editSymbol').value=a.symbolOverride||'';
   function updatePreview(){const tmp={...a,outcome:$('editOutcome').value};const calc=ratingAuto(tmp);$('editAutoHint').textContent='Voto automatico: '+calc.s+' · '+calc.why}updatePreview();$('editOutcome').onchange=updatePreview;
@@ -165,6 +263,7 @@ $('exportPdf').onclick=()=>pdfExport($('setFilter').value);
 $('exportPdfSettings').onclick=()=>{if(!active())return alert('Nessuna partita salvata.');$('settings').close();pdfExport('all')};
 $('settingsBtn').onclick=()=>$('settings').showModal();$('closeSettings').onclick=()=>$('settings').close();
 $('exportBtn').onclick=()=>downloadBlob(new Blob([JSON.stringify(store,null,2)],{type:'application/json'}),'scout-volley-backup-'+today()+'.json');
+$('archiveBackup').onclick=()=> $('exportBtn').click();
 $('importBtn').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.matches))throw new Error('invalid JSON');$('settings').close();confirmAction('Importare il backup?','L’archivio importato sostituirà tutte le partite su questo dispositivo.','Importa',()=>{store=x;redoStack=[];persist();switchView(active()?'home':'setup')})}catch{alert('Questo file non è un backup JSON valido.')}e.target.value=''};
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>switchView(b.dataset.tab));

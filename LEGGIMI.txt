@@ -1,4 +1,4 @@
-SCOUT PERSONALE VOLLEY - versione 1.5
+SCOUT PERSONALE VOLLEY - versione 1.6
 ======================================
 
 PRIMA APERTURA
@@ -53,3 +53,20 @@ NOVITA V1.5 — SCOUT SENZA BIAS DI VALUTAZIONE
 AGGIORNAMENTO HOSTING: sostituisci i file del vecchio sito con quelli di questa cartella.
 La nuova cache offline v1-5 viene attivata al prossimo aggiornamento del sito.
 Prima di aggiornare, esporta sempre il backup JSON da Impostazioni.
+
+
+NOVITA V1.6 — GESTIONE ARCHIVIO E CANCELLAZIONI
+- Apri Archivio (ex Storico) dalla barra in basso.
+- Seleziona Gestisci sulla partita desiderata.
+- Svuota set: cancella tutte le azioni di quel set, senza eliminare il numero del set.
+- Elimina set: cancella azioni + set; i set successivi sono rinumerati.
+  Per sicurezza l'unico set rimasto non può essere eliminato: puoi svuotarlo.
+- Resetta partita: cancella tutti i set e le azioni, riparte dal set 1; conserva data, avversari e fondamentali.
+- Elimina partita: rimuove tutta la partita dall'archivio.
+- Ogni operazione distruttiva chiede conferma. Non è annullabile senza un backup JSON.
+- Backup JSON: pulsante diretto nell'Archivio e nelle Impostazioni.
+- Statistiche, PDF e archivio rispecchiano immediatamente i dati rimasti.
+- Resta salvato il database locale esistente (stessa chiave localStorage della V1.5).
+- Aggiorna sullo stesso indirizzo HTTPS GitHub Pages, caricando tutti i file.
+- Se l'icona Home dell'iPhone mostra ancora la versione vecchia, chiudi e riapri l'app
+  dopo aver aggiornato i file. Se necessario, apri il sito una volta in Safari.
